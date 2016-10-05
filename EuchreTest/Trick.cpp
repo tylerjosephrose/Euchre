@@ -127,7 +127,7 @@ void Trick::Evaluate(Deck deck)
 						Highest = m_trick[i];
 					else if(isLeft && Highest.GetValue() != Value::Jack)
 						Highest = m_trick[i];
-					else if(m_trick.at(i).GetValue() > Highest.GetValue())
+					else if(m_trick.at(i).GetValue() > Highest.GetValue() && Highest.GetValue() != Value::Jack)
 						Highest = m_trick.at(i);
 				}
 			}

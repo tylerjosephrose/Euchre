@@ -22,13 +22,55 @@ int Player::PlayCard(int choice, Trick &trick)
 	//Get the Card from the choice
 	Card card = m_hand[choice-1];
 	
+	//Find left
+	Suit left;
+	switch(trick.GetTrump())
+	{
+		case Hearts:
+		{
+			left = Suit::Diamonds;
+			break;
+		}
+		case Spades:
+		{
+			left = Suit::Clubs;
+			break;
+		}
+		case Diamonds:
+		{
+			left = Suit::Hearts;
+			break;
+		}
+		case Clubs:
+		{
+			left = Suit::Spades;
+			break;
+		}
+		case High:
+		{
+			left = Suit::High;
+			break;
+		}
+		case Low:
+		{
+			left = Suit::Low;
+			break;
+		}
+	}
+	
 	//logic for if the card is valid
 	if(trick.GetLeadPlayer() != m_whoami)
 	{
 		bool CanFollowSuit = false;
 		for(auto iter: m_hand)
 		{
-			if(iter.GetSuit() == trick.GetLeadSuit())
+			if(iter.GetSuit() == trick.GetLeadSuit() && !(iter.GetSuit() == left && iter.GetValue() == Value::Jack))
+			{
+				CanFollowSuit = true;
+				break;
+			}
+			//if this card is the left bar and lead is trump
+			if(trick.GetLeadSuit() == trick.GetTrump() && (iter.GetSuit() == left && iter.GetValue() == Value::Jack))
 			{
 				CanFollowSuit = true;
 				break;
@@ -38,36 +80,19 @@ int Player::PlayCard(int choice, Trick &trick)
 	
 		if(CanFollowSuit)
 		{
+			bool validCard = true;
 			if(card.GetSuit() != trick.GetLeadSuit())
+				validCard = false;
+			if(trick.GetLeadSuit() != trick.GetTrump() && (card.GetSuit() == left && card.GetValue() == Value::Jack))
+				validCard = false;
+			if(trick.GetLeadSuit() == trick.GetTrump() && (card.GetSuit() == left && card.GetValue() == Value::Jack))
+				validCard = true;
+			if(!validCard)
 				return 1;
 		}
 	}
 	else
 	{
-		Suit left;
-		switch(trick.GetTrump())
-		{
-			case Hearts:
-			{
-				left = Suit::Diamonds;
-				break;
-			}
-			case Spades:
-			{
-				left = Suit::Clubs;
-				break;
-			}
-			case Diamonds:
-			{
-				left = Suit::Hearts;
-				break;
-			}
-			case Clubs:
-			{
-				left = Suit::Spades;
-				break;
-			}
-		}
 		if(card.GetValue() == Value::Jack && card.GetSuit() == left)
 			trick.SetLeadSuit(trick.GetTrump());
 		else

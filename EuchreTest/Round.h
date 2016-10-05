@@ -16,12 +16,19 @@ public:
 	Round(Owner LeadPlayer);
 	void PlayRound(Deck deck, vector<Player*> Players);
 	void PlayTrick(vector<Player*> Players);
+    void GetBids(vector<Player*> Players);
+    void FinalizeBid(int playerBid);
 	void SetScore();
 	void PrintHands(vector<Player*> Players);
 	
 private:
 	int AskPlayCard(Trick &trick, Player *player);
+	void SetUpShoot();
+	void PlayTrickLone(vector<Player*> Players);
 	Trick m_currentTrick;
+    int m_teamBid;
+	int m_bidAmount;
+	int m_playerBid;
 };
 
 #endif

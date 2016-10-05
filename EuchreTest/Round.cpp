@@ -4,28 +4,53 @@ Tyler Rose
 Sep-23-2016
 */
 
+#include "StringCompare.h"
+
 #include "Round.h"
 
 using namespace std;
 
+//A new Round will need created each time so we set the LeadPlayer Properly (To be done in Game.cpp)
 Round::Round(Owner LeadPlayer)
 {
 	m_currentTrick.SetLeadPlayer(LeadPlayer);
+    m_teamBid = 0;
 }
 
 void Round::PlayRound(Deck deck, vector<Player*> Players)
 {
-	//TODO: Figure out bids and trump
 	Players[0]->GetHand(deck, Owner::Player_1);
 	Players[1]->GetHand(deck, Owner::Player_2);
 	Players[2]->GetHand(deck, Owner::Player_3);
 	Players[3]->GetHand(deck, Owner::Player_4);
 	//PrintHands(Players);
+
+    GetBids(Players);
 	
 	int Team13Tricks = 0;
 	int Team24Tricks = 0;
 	
-	m_currentTrick.SetTrump(Suit::Hearts);
+	//TODO: SetUpShoot and PlayTrickLone
+	if(m_bidAmount == 7)
+		SetUpShoot();
+	if(m_bidAmount > 6)
+	{
+		for(int i = 0; i < 6; i++)
+		{
+			if(m_currentTrick.GetWinner() != Owner::InPlay)
+				m_currentTrick.SetLeadPlayer(m_currentTrick.GetWinner());
+			
+			PlayTrickLone(Players);
+			
+			m_currentTrick.Evaluate(deck);
+			if(m_currentTrick.GetWinner() == Owner::Player_1 || m_currentTrick.GetWinner() == Owner::Player_3)
+				Team13Tricks++;
+			else
+				Team24Tricks++;
+		}
+	}
+	
+	//m_currentTrick.SetTrump(Suit::Hearts);
 	
 	for(int i = 0; i < 6; i++)
 	{
@@ -46,8 +71,127 @@ void Round::PlayRound(Deck deck, vector<Player*> Players)
 	//TODO: Set the score
 }
 
+void Round::GetBids(vector<Player*> Players)
+{
+    int lead = m_currentTrick.GetLeadPlayer();
+    //7 is shoot and 8 is alone
+    int bid = 2;
+    int player;
+    for (int i = 0; i < 4; i++)
+    {
+        //stay in this loop if it was an invalid bid
+        int j = 0;
+        do
+        {
+			//Print current bidding info
+            if (bid == 2)
+                cout << "There is no current bid" << endl;
+            else
+                cout << "The current bid is: " << bid << endl;
+            cout << OwnerToString(Players[(lead + i) % 4]->WhoAmI()) << ", place a bid. (enter 0 to pass)" << endl;
+            cout << "Options are 3, 4, 5, 6, shoot, alone" << endl;
+			//Print hand of player up
+            Players[(lead + i) % 4]->PrintHand();
+            string propose;
+            cin >> propose;
+			
+			//not bidding and not the last player to go with no previous bid
+            if (atoi(propose.c_str()) == 0 && i != 3)
+                break;
+			//not bidding and is the last plaer with no previous bid
+            if (atoi(propose.c_str()) == 0 && i == 3 && bid == 2)
+            {
+                cout << "You are last and no one has made a bid. You must bid" << endl;
+                j = 1;
+            }
+			//not bidding and last player but there is already a bid
+			if (atoi(propose.c_str()) == 0 && i == 3)
+				break;
+            if (icompare(propose, "alone"))
+            {
+                bid = 8;
+                FinalizeBid((lead + i) % 4);
+                return;
+            }
+            else if (icompare(propose, "shoot"))
+            {
+                bid = 7;
+                player = (lead + i) % 4;
+            }
+            else if (atoi(propose.c_str()) > bid)
+            {
+				if (atoi(propose.c_str()) > 8)
+				{
+					cout << "This is not a valid bid" << endl;
+					j = 1;
+				}
+				else
+				{
+					bid = atoi(propose.c_str());
+					player = (lead + i) % 4;
+				}
+            }
+            else if (atoi(propose.c_str()) < bid)
+            {
+                cout << "You did not bid high enough" << endl;
+                j = 1;
+            }
+        } while (j == 1);
+    }
+	m_playerBid = player;
+	m_bidAmount = bid;
+    FinalizeBid(player);
+}
+
+void Round::FinalizeBid(int playerBid)
+{
+    //Highest bidder choses their suit here
+    switch (playerBid)
+    {
+    case 0:     m_teamBid = 1;
+    case 1:     m_teamBid = 2;
+    case 2:     m_teamBid = 1;
+    case 3:     m_teamBid = 2;
+    }
+
+    string input;
+    cout << "Player " << playerBid + 1 << ", What Suit do you want?" << endl;
+    cin >> input;
+    
+    if (icompare(input, "Hearts"))
+        m_currentTrick.SetTrump(Suit::Hearts);
+    if (icompare(input, "Diamonds"))
+        m_currentTrick.SetTrump(Suit::Diamonds);
+    if (icompare(input, "Spades"))
+        m_currentTrick.SetTrump(Suit::Spades);
+    if (icompare(input, "Clubs"))
+        m_currentTrick.SetTrump(Suit::Clubs);
+    if (icompare(input, "High"))
+        m_currentTrick.SetTrump(Suit::High);
+    if (icompare(input, "Low"))
+        m_currentTrick.SetTrump(Suit::Low);
+}
+
 void Round::PlayTrick(vector<Player*> Players)
 {
+	int lead = m_currentTrick.GetLeadPlayer();
+	for(int i = 0; i < 4; i++)
+	{
+		int good = 1;
+		cout << "This is  " << OwnerToString(Players[(lead+i)%4]->WhoAmI()) << endl;
+		while (good == 1)
+		{
+			good = AskPlayCard(m_currentTrick, Players[(lead+i)%4]);
+		}
+	}
+}
+
+void Round::PlayTrickLone(vector<Player*> Players)
+{
+	//TODO:
+	//Remove teammate who does not get to lay
+	m_playerBid;
+	
 	int lead = m_currentTrick.GetLeadPlayer();
 	for(int i = 0; i < 4; i++)
 	{
@@ -76,6 +220,11 @@ int Round::AskPlayCard(Trick &trick, Player *player)
 		return 1;
 	}
 	return 0;
+}
+
+void Round::SetUpShoot()
+{
+	//TODO
 }
 
 void Round::SetScore()
