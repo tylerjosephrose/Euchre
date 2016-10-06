@@ -105,6 +105,23 @@ int Player::PlayCard(int choice, Trick &trick)
 	return 0;
 }
 
+Card Player::GiveCard(int choice)
+{
+	Card temp = m_hand[choice-1];
+	m_hand.erase(m_hand.begin() + choice - 1);
+	return temp;
+}
+
+void Player::TakeCard(Card card, int choice, Deck deck)
+{
+	//does not change owner since same team will still get point
+	Card temp = m_hand[choice-1];
+	m_hand.erase(m_hand.begin() + choice - 1);
+	deck.ReturnCard(temp);
+	m_hand.push_back(card);
+	
+}
+
 void Player::GetHand(Deck &deck, Owner owner)
 {
 	//get 6 cards from the deck to by my hand for the round

@@ -14,7 +14,7 @@ class Round
 {
 public:
 	Round(Owner LeadPlayer);
-	void PlayRound(Deck deck, vector<Player*> Players);
+	void PlayRound(Deck &deck, vector<Player*> Players);
 	void PlayTrick(vector<Player*> Players);
     void GetBids(vector<Player*> Players);
     void FinalizeBid(int playerBid);
@@ -23,7 +23,7 @@ public:
 	
 private:
 	int AskPlayCard(Trick &trick, Player *player);
-	void SetUpShoot();
+	void SetUpShoot(vector<Player*> Players, Deck deck);
 	void PlayTrickLone(vector<Player*> Players);
 	Trick m_currentTrick;
     int m_teamBid;

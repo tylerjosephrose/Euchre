@@ -17,7 +17,7 @@ Round::Round(Owner LeadPlayer)
     m_teamBid = 0;
 }
 
-void Round::PlayRound(Deck deck, vector<Player*> Players)
+void Round::PlayRound(Deck &deck, vector<Player*> Players)
 {
 	Players[0]->GetHand(deck, Owner::Player_1);
 	Players[1]->GetHand(deck, Owner::Player_2);
@@ -32,13 +32,16 @@ void Round::PlayRound(Deck deck, vector<Player*> Players)
 	
 	//TODO: SetUpShoot and PlayTrickLone
 	if(m_bidAmount == 7)
-		SetUpShoot();
+		SetUpShoot(Players, deck);
 	if(m_bidAmount > 6)
 	{
 		for(int i = 0; i < 6; i++)
 		{
 			if(m_currentTrick.GetWinner() != Owner::InPlay)
 				m_currentTrick.SetLeadPlayer(m_currentTrick.GetWinner());
+			
+			//remove player who is not in
+			Players.erase(Players.begin() + ((m_playerBid + 2)%4));
 			
 			PlayTrickLone(Players);
 			
@@ -96,16 +99,17 @@ void Round::GetBids(vector<Player*> Players)
             cin >> propose;
 			
 			//not bidding and not the last player to go with no previous bid
-            if (atoi(propose.c_str()) == 0 && i != 3)
+            if (icompare(propose, "0") && i != 3)
                 break;
-			//not bidding and is the last plaer with no previous bid
-            if (atoi(propose.c_str()) == 0 && i == 3 && bid == 2)
+			//not bidding and is the last player with no previous bid
+            if (icompare(propose, "0") && i == 3 && bid == 2)
             {
                 cout << "You are last and no one has made a bid. You must bid" << endl;
+				bid = 3;
                 j = 1;
             }
 			//not bidding and last player but there is already a bid
-			if (atoi(propose.c_str()) == 0 && i == 3)
+			if (icompare(propose, "0") && i == 3)
 				break;
             if (icompare(propose, "alone"))
             {
@@ -188,18 +192,17 @@ void Round::PlayTrick(vector<Player*> Players)
 
 void Round::PlayTrickLone(vector<Player*> Players)
 {
-	//TODO:
-	//Remove teammate who does not get to lay
+	//TODO: Wrong player gets to go after bid
 	m_playerBid;
 	
 	int lead = m_currentTrick.GetLeadPlayer();
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 3; i++)
 	{
 		int good = 1;
-		cout << "This is  " << OwnerToString(Players[(lead+i)%4]->WhoAmI()) << endl;
+		cout << "This is  " << OwnerToString(Players[(lead+i)%3]->WhoAmI()) << endl;
 		while (good == 1)
 		{
-			good = AskPlayCard(m_currentTrick, Players[(lead+i)%4]);
+			good = AskPlayCard(m_currentTrick, Players[(lead+i)%3]);
 		}
 	}
 }
@@ -222,9 +225,27 @@ int Round::AskPlayCard(Trick &trick, Player *player)
 	return 0;
 }
 
-void Round::SetUpShoot()
+void Round::SetUpShoot(vector<Player*> Players, Deck deck)
 {
-	//TODO
+	cout << "Player " << m_playerBid + 3 << ", your teammate is shooting it in " << SuitToString(m_currentTrick.GetTrump()) << endl;
+	cout << "What card will you give them?\n";
+	Players[m_playerBid+2]->PrintHand();
+	int choice;
+	cin >> choice;
+	Card temp = Players[m_playerBid+2]->GiveCard(choice);
+	cout << "Player " << m_playerBid + 1 << ", your teammate is giving you the " << temp.ValueToString() << " of " << temp.SuitToString() << endl;
+	cout << "What card will you discard for it?\n";
+	Players[m_playerBid]->PrintHand();
+	cin >> choice;
+	Players[m_playerBid]->TakeCard(temp, choice, deck);
+	
+	//return the other Players hand to the deck
+	for (int i = 0; i < 5; i++)
+	{
+		Card temp = Players[m_playerBid+2]->GiveCard(1);
+		deck.ReturnCard(temp);
+		Players[m_playerBid+2]->PrintHand();
+	}
 }
 
 void Round::SetScore()
