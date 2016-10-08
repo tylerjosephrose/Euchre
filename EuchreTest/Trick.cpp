@@ -68,6 +68,13 @@ void Trick::Evaluate(Deck deck)
 	//assert(m_trick.size() > 2 && m_trick.size() < 4);
 	cout << endl;
 	Card Highest = m_trick.at(0);
+	if(Highest.GetSuit() == m_trump && Highest.GetValue() == Value::Jack)
+	{
+		m_winner = Highest.GetOwner();
+		cout << Highest.OwnerToString() << " is the winner with a " << 		Highest.ValueToString() << " of " << Highest.SuitToString() << endl;
+		ReturnCards(deck);
+		return;
+	}
 	if(m_trump != Suit::High && m_trump != Suit::Low)
 	{
 		//look for left bar
@@ -99,15 +106,20 @@ void Trick::Evaluate(Deck deck)
 		
 		for (int i = 1; i < m_trick.size(); i++)
 		{
+			//decide if the current card is the right bar
+			bool isRight = false;
+			if(m_trick[i].GetValue() == Value::Jack && m_trick[i].GetSuit() == m_trump)
+			{
+				m_winner = Highest.GetOwner();
+				cout << Highest.OwnerToString() << " is the winner with a " << 		Highest.ValueToString() << " of " << Highest.SuitToString() << endl;
+				ReturnCards(deck);
+				return;
+			}
+			
 			//decide if the current card is the left bar
 			bool isLeft = false;
 			if(m_trick[i].GetValue() == Value::Jack && m_trick[i].GetSuit() == left)
 				isLeft = true;
-			
-			//decide if the current card is the right bar
-			bool isRight = false;
-			if(m_trick[i].GetValue() == Value::Jack && m_trick[i].GetSuit() == m_trump)
-				isRight = true;
 			
 			//for non trump find highest
 			if(m_trick.at(i).GetSuit() == Highest.GetSuit() && Highest.GetSuit() != m_trump && !isLeft)
@@ -118,14 +130,12 @@ void Trick::Evaluate(Deck deck)
 			//need this check in case not followed suit and not trump
 			if(m_trick.at(i).GetSuit() == m_trump || isLeft)
 			{
-				if(Highest.GetSuit() != m_trump || isLeft)
+				if(Highest.GetSuit() != m_trump && !(Highest.GetSuit() == left && Highest.GetValue() == Value::Jack))
 					Highest = m_trick.at(i);
 				//This is for trump vs trump decisions
 				else
 				{
-					if(isRight)
-						Highest = m_trick[i];
-					else if(isLeft && Highest.GetValue() != Value::Jack)
+					if(isLeft && Highest.GetValue() != Value::Jack)
 						Highest = m_trick[i];
 					else if(m_trick.at(i).GetValue() > Highest.GetValue() && Highest.GetValue() != Value::Jack)
 						Highest = m_trick.at(i);

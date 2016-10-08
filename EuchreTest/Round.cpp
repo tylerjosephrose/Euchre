@@ -5,7 +5,6 @@ Sep-23-2016
 */
 
 #include "StringCompare.h"
-
 #include "Round.h"
 
 using namespace std;
@@ -17,7 +16,7 @@ Round::Round(Owner LeadPlayer)
     m_teamBid = 0;
 }
 
-void Round::PlayRound(Deck &deck, vector<Player*> Players)
+void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
 {
 	Players[0]->GetHand(deck, Owner::Player_1);
 	Players[1]->GetHand(deck, Owner::Player_2);
@@ -27,51 +26,54 @@ void Round::PlayRound(Deck &deck, vector<Player*> Players)
 
     GetBids(Players);
 	
-	int Team13Tricks = 0;
-	int Team24Tricks = 0;
+	int Team1Tricks = 0;
+	int Team2Tricks = 0;
 	
 	//TODO: SetUpShoot and PlayTrickLone
 	if(m_bidAmount == 7)
 		SetUpShoot(Players, deck);
 	if(m_bidAmount > 6)
 	{
+		//remove player who is not in
+		Players.erase(Players.begin() + ((m_playerBid + 2)%4));
+		
+		if(m_currentTrick.GetLeadPlayer() == (m_playerBid + 2) % 4)
+			m_currentTrick.SetLeadPlayer(static_cast<Owner>((m_currentTrick.GetLeadPlayer() + 1) % 4));
+		
 		for(int i = 0; i < 6; i++)
 		{
 			if(m_currentTrick.GetWinner() != Owner::InPlay)
 				m_currentTrick.SetLeadPlayer(m_currentTrick.GetWinner());
 			
-			//remove player who is not in
-			Players.erase(Players.begin() + ((m_playerBid + 2)%4));
-			
 			PlayTrickLone(Players);
 			
 			m_currentTrick.Evaluate(deck);
 			if(m_currentTrick.GetWinner() == Owner::Player_1 || m_currentTrick.GetWinner() == Owner::Player_3)
-				Team13Tricks++;
+				Team1Tricks++;
 			else
-				Team24Tricks++;
+				Team2Tricks++;
+		}
+	}
+	else
+	{
+		for(int i = 0; i < 6; i++)
+		{
+			if(m_currentTrick.GetWinner() != Owner::InPlay)
+				m_currentTrick.SetLeadPlayer(m_currentTrick.GetWinner());
+			
+			PlayTrick(Players);
+			
+			m_currentTrick.Evaluate(deck);
+			if(m_currentTrick.GetWinner() == Owner::Player_1 || m_currentTrick.GetWinner() == Owner::Player_3)
+				Team1Tricks++;
+			else
+				Team2Tricks++;
 		}
 	}
 	
-	//m_currentTrick.SetTrump(Suit::Hearts);
+	//cout << "The Round is over with the scores:\nTeam1: " << Team1Tricks << "\nTeam2: " << Team2Tricks << endl;
 	
-	for(int i = 0; i < 6; i++)
-	{
-		if(m_currentTrick.GetWinner() != Owner::InPlay)
-			m_currentTrick.SetLeadPlayer(m_currentTrick.GetWinner());
-		
-		PlayTrick(Players);
-		
-		m_currentTrick.Evaluate(deck);
-		if(m_currentTrick.GetWinner() == Owner::Player_1 || m_currentTrick.GetWinner() == Owner::Player_3)
-			Team13Tricks++;
-		else
-			Team24Tricks++;
-	}
-	
-	cout << "The Round is over with the scores:\nTeam13: " << Team13Tricks << "\nTeam24: " << Team24Tricks << endl;
-	
-	//TODO: Set the score
+	SetScore(Team1Tricks, Team2Tricks, Points);
 }
 
 void Round::GetBids(vector<Player*> Players)
@@ -193,9 +195,17 @@ void Round::PlayTrick(vector<Player*> Players)
 void Round::PlayTrickLone(vector<Player*> Players)
 {
 	//TODO: Wrong player gets to go after bid
-	m_playerBid;
 	
-	int lead = m_currentTrick.GetLeadPlayer();
+	int lead; // = m_currentTrick.GetLeadPlayer();
+	
+	for(lead = 0; lead < 3; lead++)
+	{
+		if(Players[lead]->WhoAmI() == m_currentTrick.GetLeadPlayer())
+			break;
+	}
+	
+	//if(lead == 3)
+		//lead = 2;
 	for(int i = 0; i < 3; i++)
 	{
 		int good = 1;
@@ -227,12 +237,15 @@ int Round::AskPlayCard(Trick &trick, Player *player)
 
 void Round::SetUpShoot(vector<Player*> Players, Deck deck)
 {
-	cout << "Player " << m_playerBid + 3 << ", your teammate is shooting it in " << SuitToString(m_currentTrick.GetTrump()) << endl;
+	int playerbidding = (m_playerBid + 3) % 4;
+	if(playerbidding == 0)
+		playerbidding = 4;
+	cout << "Player " << playerbidding << ", your teammate is shooting it in " << SuitToString(m_currentTrick.GetTrump()) << endl;
 	cout << "What card will you give them?\n";
-	Players[m_playerBid+2]->PrintHand();
+	Players[(m_playerBid+2) % 4]->PrintHand();
 	int choice;
 	cin >> choice;
-	Card temp = Players[m_playerBid+2]->GiveCard(choice);
+	Card temp = Players[(m_playerBid+2) % 4]->GiveCard(choice);
 	cout << "Player " << m_playerBid + 1 << ", your teammate is giving you the " << temp.ValueToString() << " of " << temp.SuitToString() << endl;
 	cout << "What card will you discard for it?\n";
 	Players[m_playerBid]->PrintHand();
@@ -242,15 +255,91 @@ void Round::SetUpShoot(vector<Player*> Players, Deck deck)
 	//return the other Players hand to the deck
 	for (int i = 0; i < 5; i++)
 	{
-		Card temp = Players[m_playerBid+2]->GiveCard(1);
+		Card temp = Players[(m_playerBid+2) % 4]->GiveCard(1);
 		deck.ReturnCard(temp);
-		Players[m_playerBid+2]->PrintHand();
+		//Players[(m_playerBid+2) % 4]->PrintHand();
 	}
 }
 
-void Round::SetScore()
+void Round::SetScore(int team1Tricks, int team2Tricks, vector<int> Points)
 {
-	//TODO
+	//Loner
+	if(m_bidAmount == 8)
+	{
+		if(m_teamBid == 1 && team1Tricks < 6)
+		{
+			Points[1] = -12;
+			Points[2] = team2Tricks;
+			return;
+		}
+		else if(m_teamBid == 2 && team2Tricks < 6)
+		{
+			Points[1] = team1Tricks;
+			Points[2] = -12;
+			return;
+		}
+		else if(m_teamBid == 1)
+		{
+			Points[1] = 12;
+			return;
+		}
+		else
+		{
+			Points[2] = 12;
+			return;
+		}
+	}
+	
+	//shoot
+	if(m_bidAmount == 7)
+	{
+		if(m_teamBid == 1 && team1Tricks < 6)
+		{
+			Points[1] = -8;
+			Points[2] = team2Tricks;
+			return;
+		}
+		else if(m_teamBid == 2 && team2Tricks < 6)
+		{
+			Points[1] = team1Tricks;
+			Points[2] = -8;
+			return;
+		}
+		else if(m_teamBid == 1)
+		{
+			Points[1] = 8;
+			return;
+		}
+		else
+		{
+			Points[2] = 8;
+			return;
+		}
+	}
+	
+	//team1 fails bid
+	if(m_teamBid == 1 && m_bidAmount > team1Tricks)
+	{
+		Points[1] = m_bidAmount*-1;
+		Points[2] = team2Tricks;
+		return;
+	}
+	
+	//team2 fails bid
+	else if(m_teamBid == 2 && m_bidAmount > team2Tricks)
+	{
+		Points[1] = team1Tricks;
+		Points[2] = m_bidAmount*-1;
+		return;
+	}
+	
+	//either team completes the bid
+	else
+	{
+		Points[1] = team1Tricks;
+		Points[2] = team2Tricks;
+		return;
+	}
 }
 
 void Round::PrintHands(vector<Player*> players)

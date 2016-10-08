@@ -13,7 +13,7 @@ using namespace std;
 
 enum Value { Nine = 9, Ten = 10, Jack = 11, Queen = 12, King = 13, Ace = 14 };
 enum Suit { Hearts, Diamonds, Spades, Clubs, High, Low };
-enum Owner { Player_1, Player_2, Player_3, Player_4, MainDeck, InPlay };
+enum Owner { Player_1 = 0, Player_2 = 1, Player_3 = 2, Player_4 = 3, MainDeck = 4, InPlay = 5 };
 
 // Class for the Card Structure
 class Card

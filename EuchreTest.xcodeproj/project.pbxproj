@@ -13,6 +13,7 @@
 		9A0A7D9D1DA14E560016CCDA /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A7D951DA14E560016CCDA /* Player.cpp */; };
 		9A0A7D9E1DA14E560016CCDA /* Round.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A7D971DA14E560016CCDA /* Round.cpp */; };
 		9A0A7D9F1DA14E560016CCDA /* Trick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A0A7D991DA14E560016CCDA /* Trick.cpp */; };
+		9A65F3F81DA959100001ABB4 /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A65F3F71DA959100001ABB4 /* Game.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +42,7 @@
 		9A0A7D981DA14E560016CCDA /* Round.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Round.h; sourceTree = "<group>"; };
 		9A0A7D991DA14E560016CCDA /* Trick.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trick.cpp; sourceTree = "<group>"; };
 		9A0A7D9A1DA14E560016CCDA /* Trick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trick.h; sourceTree = "<group>"; };
+		9A65F3F71DA959100001ABB4 /* Game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Game.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				9A0A7D911DA14E560016CCDA /* Card.h */,
 				9A0A7D921DA14E560016CCDA /* Deck.cpp */,
 				9A0A7D931DA14E560016CCDA /* Deck.h */,
+				9A65F3F71DA959100001ABB4 /* Game.cpp */,
 				9A0A7D941DA14E560016CCDA /* Game.h */,
 				9A0A7D951DA14E560016CCDA /* Player.cpp */,
 				9A0A7D961DA14E560016CCDA /* Player.h */,
@@ -151,6 +154,7 @@
 				9A0A7D9F1DA14E560016CCDA /* Trick.cpp in Sources */,
 				9A0A7D8A1DA14E0D0016CCDA /* main.cpp in Sources */,
 				9A0A7D9B1DA14E560016CCDA /* Card.cpp in Sources */,
+				9A65F3F81DA959100001ABB4 /* Game.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

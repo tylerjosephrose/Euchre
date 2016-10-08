@@ -20,7 +20,10 @@ int main()
 	Deck deck = Deck();
 	deck.Shuffle();
 	//deck.PrintDeck();
-
+	
+	Game game = Game();
+	game.PlayGame(deck);
+/*
 	Player Player1(Owner::Player_1), Player2(Owner::Player_2), Player3(Owner::Player_3), Player4(Owner::Player_4);
 	
 	vector<Player*> Players;
@@ -30,9 +33,9 @@ int main()
 	Players.push_back(&Player4);
 	
 	
-	Round round1(Owner::Player_1);
+	Round round1(Owner::Player_4);
 	round1.PlayRound(deck, Players);
-	/*
+	
 	Player1.GetHand(deck, Owner::Player_1);
 	Player2.GetHand(deck, Owner::Player_2);
 	Player3.GetHand(deck, Owner::Player_3);
