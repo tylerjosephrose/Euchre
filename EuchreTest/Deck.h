@@ -24,6 +24,7 @@ public:
 	Card DrawCard();
 	void ReturnCard(Card card);
 	void PrintDeck();
+	int DeckSize() const;
 	
 private:
 	vector<Card> m_cards;

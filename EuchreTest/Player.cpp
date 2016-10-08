@@ -112,7 +112,7 @@ Card Player::GiveCard(int choice)
 	return temp;
 }
 
-void Player::TakeCard(Card card, int choice, Deck deck)
+void Player::TakeCard(Card card, int choice, Deck &deck)
 {
 	//since TakeCard is only called for shooting, we need to switch the owner to the partner
 	Card temp = m_hand[choice-1];

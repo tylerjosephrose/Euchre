@@ -60,7 +60,7 @@ void Trick::PrintTrick()
 		cout << iter.ValueToString() << " of " << iter.SuitToString() << " from " << iter.OwnerToString() << endl;
 }
 
-void Trick::Evaluate(Deck deck)
+void Trick::Evaluate(Deck &deck)
 {
 	//TODO: factor in left and right bar take presidence
 	PrintTrick();
@@ -171,7 +171,7 @@ Owner Trick::GetWinner() const
 	return m_winner;
 }
 
-void Trick::ReturnCards(Deck deck)
+void Trick::ReturnCards(Deck &deck)
 {
 	for (int i = m_trick.size()-1; i >= 0; i--)
 	{

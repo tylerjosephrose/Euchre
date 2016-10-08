@@ -20,7 +20,7 @@ public:
 	Player(Owner player);
 	int PlayCard(int choice, Trick &trick);
 	Card GiveCard(int choice);
-	void TakeCard(Card card, int choice, Deck deck);
+	void TakeCard(Card card, int choice, Deck &deck);
 	void GetHand(Deck &deck, Owner owner);
 	void PrintHand() const;
 	Owner WhoAmI() const;

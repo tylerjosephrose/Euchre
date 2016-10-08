@@ -18,12 +18,12 @@ public:
 	void PlayTrick(vector<Player*> Players);
     void GetBids(vector<Player*> Players);
     void FinalizeBid(int playerBid);
-	void SetScore(int team1Tricks, int team2Tricks, vector<int> Points);
+	void SetScore(int team1Tricks, int team2Tricks, vector<int> &Points);
 	void PrintHands(vector<Player*> Players);
 	
 private:
 	int AskPlayCard(Trick &trick, Player *player);
-	void SetUpShoot(vector<Player*> Players, Deck deck);
+	void SetUpShoot(vector<Player*> Players, Deck &deck);
 	void PlayTrickLone(vector<Player*> Players);
 	Trick m_currentTrick;
     int m_teamBid;

@@ -53,3 +53,8 @@ void Deck::ReturnCard(Card card)
 {
 	m_cards.push_back(card);
 }
+
+int Deck::DeckSize() const
+{
+	return m_cards.size();
+}

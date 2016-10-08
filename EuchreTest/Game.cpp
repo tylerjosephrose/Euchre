@@ -26,16 +26,23 @@ void Game::PlayGame(Deck &deck)
 	m_teamOneScore = 0;
 	m_teamTwoScore = 0;
 	
+	cout << "Deck size: " << deck.DeckSize() << endl;
+	
+	//Pick the player to lead
+	int lead = (rand() % 4) + 1;
+	
 	//typically 32
-	int WinningScore = 3;
+	int WinningScore = 6;
 	int numOfRounds = 0;
 	while(m_teamOneScore < WinningScore && m_teamTwoScore < WinningScore)
 	{
 		numOfRounds++;
 		cout << "Round " << numOfRounds << endl;
-		Round round(Owner::Player_4);
+		Round round(static_cast<Owner>((lead + numOfRounds) % 4));
 		vector<int> Points = {0, 0};
 		round.PlayRound(deck, Players, Points);
+		SetScore(Points);
+		cout << "Deck size: " << deck.DeckSize() << endl;
 		PrintScore();
 	}
 }
@@ -49,6 +56,6 @@ void Game::PrintScore() const
 
 void Game::SetScore(vector<int> &Points)
 {
-	m_teamOneScore = m_teamOneScore + Points[1];
-	m_teamTwoScore = m_teamTwoScore + Points[2];
+	m_teamOneScore = m_teamOneScore + Points[0];
+	m_teamTwoScore = m_teamTwoScore + Points[1];
 }

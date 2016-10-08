@@ -29,7 +29,7 @@ void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
 	int Team1Tricks = 0;
 	int Team2Tricks = 0;
 	
-	//TODO: SetUpShoot and PlayTrickLone
+	//SetUpShoot and PlayTrickLone
 	if(m_bidAmount == 7)
 		SetUpShoot(Players, deck);
 	if(m_bidAmount > 6)
@@ -116,7 +116,10 @@ void Round::GetBids(vector<Player*> Players)
             if (icompare(propose, "alone"))
             {
                 bid = 8;
-                FinalizeBid((lead + i) % 4);
+				player = (lead + i) % 4;
+				m_playerBid = player;
+				m_bidAmount = bid;
+				FinalizeBid(player);
                 return;
             }
             else if (icompare(propose, "shoot"))
@@ -154,10 +157,26 @@ void Round::FinalizeBid(int playerBid)
     //Highest bidder choses their suit here
     switch (playerBid)
     {
-    case 0:     m_teamBid = 1;
-    case 1:     m_teamBid = 2;
-    case 2:     m_teamBid = 1;
-    case 3:     m_teamBid = 2;
+    case 0:
+		{
+			m_teamBid = 1;
+			break;
+		}
+    case 1:
+		{
+			m_teamBid = 2;
+			break;
+		}
+    case 2:
+		{
+			m_teamBid = 1;
+			break;
+		}
+    case 3:
+		{
+			m_teamBid = 2;
+			break;
+		}
     }
 
     string input;
@@ -235,7 +254,7 @@ int Round::AskPlayCard(Trick &trick, Player *player)
 	return 0;
 }
 
-void Round::SetUpShoot(vector<Player*> Players, Deck deck)
+void Round::SetUpShoot(vector<Player*> Players, Deck &deck)
 {
 	int playerbidding = (m_playerBid + 3) % 4;
 	if(playerbidding == 0)
@@ -261,31 +280,31 @@ void Round::SetUpShoot(vector<Player*> Players, Deck deck)
 	}
 }
 
-void Round::SetScore(int team1Tricks, int team2Tricks, vector<int> Points)
+void Round::SetScore(int team1Tricks, int team2Tricks, vector<int> &Points)
 {
 	//Loner
 	if(m_bidAmount == 8)
 	{
 		if(m_teamBid == 1 && team1Tricks < 6)
 		{
-			Points[1] = -12;
-			Points[2] = team2Tricks;
+			Points[0] = -12;
+			Points[1] = team2Tricks;
 			return;
 		}
 		else if(m_teamBid == 2 && team2Tricks < 6)
 		{
-			Points[1] = team1Tricks;
-			Points[2] = -12;
+			Points[0] = team1Tricks;
+			Points[1] = -12;
 			return;
 		}
 		else if(m_teamBid == 1)
 		{
-			Points[1] = 12;
+			Points[0] = 12;
 			return;
 		}
 		else
 		{
-			Points[2] = 12;
+			Points[1] = 12;
 			return;
 		}
 	}
@@ -295,24 +314,24 @@ void Round::SetScore(int team1Tricks, int team2Tricks, vector<int> Points)
 	{
 		if(m_teamBid == 1 && team1Tricks < 6)
 		{
-			Points[1] = -8;
-			Points[2] = team2Tricks;
+			Points[0] = -8;
+			Points[1] = team2Tricks;
 			return;
 		}
 		else if(m_teamBid == 2 && team2Tricks < 6)
 		{
-			Points[1] = team1Tricks;
-			Points[2] = -8;
+			Points[0] = team1Tricks;
+			Points[1] = -8;
 			return;
 		}
 		else if(m_teamBid == 1)
 		{
-			Points[1] = 8;
+			Points[0] = 8;
 			return;
 		}
 		else
 		{
-			Points[2] = 8;
+			Points[1] = 8;
 			return;
 		}
 	}
@@ -320,24 +339,24 @@ void Round::SetScore(int team1Tricks, int team2Tricks, vector<int> Points)
 	//team1 fails bid
 	if(m_teamBid == 1 && m_bidAmount > team1Tricks)
 	{
-		Points[1] = m_bidAmount*-1;
-		Points[2] = team2Tricks;
+		Points[0] = m_bidAmount*-1;
+		Points[1] = team2Tricks;
 		return;
 	}
 	
 	//team2 fails bid
 	else if(m_teamBid == 2 && m_bidAmount > team2Tricks)
 	{
-		Points[1] = team1Tricks;
-		Points[2] = m_bidAmount*-1;
+		Points[0] = team1Tricks;
+		Points[1] = m_bidAmount*-1;
 		return;
 	}
 	
 	//either team completes the bid
 	else
 	{
-		Points[1] = team1Tricks;
-		Points[2] = team2Tricks;
+		Points[0] = team1Tricks;
+		Points[1] = team2Tricks;
 		return;
 	}
 }
