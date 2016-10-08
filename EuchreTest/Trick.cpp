@@ -62,7 +62,6 @@ void Trick::PrintTrick()
 
 void Trick::Evaluate(Deck &deck)
 {
-	//TODO: factor in left and right bar take presidence
 	PrintTrick();
 	//TODO: fix this assertion
 	//assert(m_trick.size() > 2 && m_trick.size() < 4);

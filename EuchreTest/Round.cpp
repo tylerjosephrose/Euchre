@@ -22,7 +22,6 @@ void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
 	Players[1]->GetHand(deck, Owner::Player_2);
 	Players[2]->GetHand(deck, Owner::Player_3);
 	Players[3]->GetHand(deck, Owner::Player_4);
-	//PrintHands(Players);
 
     GetBids(Players);
 	
@@ -70,8 +69,6 @@ void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
 				Team2Tricks++;
 		}
 	}
-	
-	//cout << "The Round is over with the scores:\nTeam1: " << Team1Tricks << "\nTeam2: " << Team2Tricks << endl;
 	
 	SetScore(Team1Tricks, Team2Tricks, Points);
 }
@@ -358,15 +355,5 @@ void Round::SetScore(int team1Tricks, int team2Tricks, vector<int> &Points)
 		Points[0] = team1Tricks;
 		Points[1] = team2Tricks;
 		return;
-	}
-}
-
-void Round::PrintHands(vector<Player*> players)
-{
-    for (int i = 0; i < 4; i++)
-	{
-		cout << "This is Player " << i+1 << "'s hand:\n";
-		players[i]->PrintHand();
-		cout << endl;
 	}
 }

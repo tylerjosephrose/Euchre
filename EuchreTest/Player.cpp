@@ -100,7 +100,7 @@ int Player::PlayCard(int choice, Trick &trick)
 	}
 	
 	trick.SetCard(m_hand.at(choice - 1));
-	//begin is zero element so we use begin + desired card - 2
+	//begin is zero element so we use begin + desired card - 1
 	m_hand.erase(m_hand.begin() + choice - 1);
 	return 0;
 }

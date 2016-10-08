@@ -19,7 +19,6 @@ public:
     void GetBids(vector<Player*> Players);
     void FinalizeBid(int playerBid);
 	void SetScore(int team1Tricks, int team2Tricks, vector<int> &Points);
-	void PrintHands(vector<Player*> Players);
 	
 private:
 	int AskPlayCard(Trick &trick, Player *player);

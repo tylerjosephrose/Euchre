@@ -26,23 +26,21 @@ void Game::PlayGame(Deck &deck)
 	m_teamOneScore = 0;
 	m_teamTwoScore = 0;
 	
-	cout << "Deck size: " << deck.DeckSize() << endl;
-	
 	//Pick the player to lead
 	int lead = (rand() % 4) + 1;
 	
 	//typically 32
-	int WinningScore = 6;
+	int WinningScore = 32;
 	int numOfRounds = 0;
 	while(m_teamOneScore < WinningScore && m_teamTwoScore < WinningScore)
 	{
 		numOfRounds++;
+		deck.Shuffle();
 		cout << "Round " << numOfRounds << endl;
 		Round round(static_cast<Owner>((lead + numOfRounds) % 4));
 		vector<int> Points = {0, 0};
 		round.PlayRound(deck, Players, Points);
 		SetScore(Points);
-		cout << "Deck size: " << deck.DeckSize() << endl;
 		PrintScore();
 	}
 }
