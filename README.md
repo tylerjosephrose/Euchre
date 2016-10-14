@@ -1,7 +1,7 @@
 # Euchre
-This is Euchre the good way back in the Midwest!
+This is Bid Euchre the good way back in Midwest Ohio!
 
 This is starting out as a program to be run in terminal or command prompt.
 
-Currently supports one round of play with default of hearts as trump. Will add support for bidding as well as full games
+Currently runs the full game with the user playing all four hands.
 Also looking to support AI for all but the main player (YOU!)
