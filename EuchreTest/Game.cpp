@@ -27,6 +27,7 @@ void Game::PlayGame(Deck &deck)
 	m_teamTwoScore = 0;
 	
 	//Pick the player to lead
+	srand(time(NULL));
 	int lead = (rand() % 4) + 1;
 	
 	//typically 32
