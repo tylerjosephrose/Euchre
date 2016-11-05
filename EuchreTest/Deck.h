@@ -25,9 +25,11 @@ public:
 	void ReturnCard(Card card);
 	void PrintDeck();
 	int DeckSize() const;
+	static Deck* GetInstance();
 	
 private:
 	vector<Card> m_cards;
+	static Deck* m_deckInstance;
 };
 
 

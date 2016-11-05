@@ -20,7 +20,7 @@ public:
     Owner GetLeadPlayer() const;
 	Suit GetTrump() const;
 	Owner GetWinner() const;
-    void Evaluate(Deck &deck);
+    void Evaluate();
 	void SetLeadSuit(Suit suit);
 	void SetLeadPlayer(Owner owner);
 	void SetCard(Card card);
@@ -28,7 +28,7 @@ public:
 	void PrintTrick();
 
 private:
-	void ReturnCards(Deck &deck);
+	void ReturnCards();
 	
     vector<Card>m_trick;
 	Suit m_leadSuit;

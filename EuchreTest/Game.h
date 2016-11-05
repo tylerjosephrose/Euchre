@@ -17,7 +17,7 @@ class Game
 {
 public:
 	Game();
-	void PlayGame(Deck &deck);
+	void PlayGame();
 	void PrintScore() const;
 	void SetScore(vector<int> &Points);
 	

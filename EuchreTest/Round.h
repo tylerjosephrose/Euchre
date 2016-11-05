@@ -9,12 +9,13 @@ Sep-23-2016
 
 #include "Deck.h"
 #include "Player.h"
+#include "AI.h"
 
 class Round
 {
 public:
 	Round(Owner LeadPlayer);
-	void PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points);
+	void PlayRound(vector<Player*> Players, vector<int> &Points);
 	void PlayTrick(vector<Player*> Players);
     void GetBids(vector<Player*> Players);
     void FinalizeBid(int playerBid);
@@ -22,7 +23,7 @@ public:
 	
 private:
 	int AskPlayCard(Trick &trick, Player *player);
-	void SetUpShoot(vector<Player*> Players, Deck &deck);
+	void SetUpShoot(vector<Player*> Players);
 	void PlayTrickLone(vector<Player*> Players);
 	Trick m_currentTrick;
     int m_teamBid;

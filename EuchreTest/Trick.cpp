@@ -60,7 +60,7 @@ void Trick::PrintTrick()
 		cout << iter.ValueToString() << " of " << iter.SuitToString() << " from " << iter.OwnerToString() << endl;
 }
 
-void Trick::Evaluate(Deck &deck)
+void Trick::Evaluate()
 {
 	PrintTrick();
 	//TODO: fix this assertion
@@ -71,7 +71,7 @@ void Trick::Evaluate(Deck &deck)
 	{
 		m_winner = Highest.GetOwner();
 		cout << Highest.OwnerToString() << " is the winner with a " << 		Highest.ValueToString() << " of " << Highest.SuitToString() << endl;
-		ReturnCards(deck);
+		ReturnCards();
 		return;
 	}
 	if(m_trump != Suit::High && m_trump != Suit::Low)
@@ -100,18 +100,26 @@ void Trick::Evaluate(Deck &deck)
 				left = Suit::Spades;
 				break;
 			}
+			case High:
+			{
+				left = Suit::High;
+				break;
+			}
+			case Low:
+			{
+				left = Suit::Low;
+				break;
+			}
 		}
 		
 		
 		for (int i = 1; i < m_trick.size(); i++)
 		{
-			//decide if the current card is the right bar
-			bool isRight = false;
 			if(m_trick[i].GetValue() == Value::Jack && m_trick[i].GetSuit() == m_trump)
 			{
 				m_winner = Highest.GetOwner();
 				cout << Highest.OwnerToString() << " is the winner with a " << 		Highest.ValueToString() << " of " << Highest.SuitToString() << endl;
-				ReturnCards(deck);
+				ReturnCards();
 				return;
 			}
 			
@@ -162,7 +170,7 @@ void Trick::Evaluate(Deck &deck)
 	}
 	m_winner = Highest.GetOwner();
 	cout << Highest.OwnerToString() << " is the winner with a " << 		Highest.ValueToString() << " of " << Highest.SuitToString() << endl;
-	ReturnCards(deck);
+	ReturnCards();
 }
 
 Owner Trick::GetWinner() const
@@ -170,12 +178,13 @@ Owner Trick::GetWinner() const
 	return m_winner;
 }
 
-void Trick::ReturnCards(Deck &deck)
+void Trick::ReturnCards()
 {
-	for (int i = m_trick.size()-1; i >= 0; i--)
+	Deck* deck = Deck::GetInstance();
+	for (int i = (int)m_trick.size()-1; i >= 0; i--)
 	{
 		Card temp = m_trick.at(i);
 		m_trick.pop_back();
-		deck.ReturnCard(temp);
+		deck->ReturnCard(temp);
 	}
 }

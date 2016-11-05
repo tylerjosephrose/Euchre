@@ -16,12 +16,12 @@ Round::Round(Owner LeadPlayer)
     m_teamBid = 0;
 }
 
-void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
+void Round::PlayRound(vector<Player*> Players, vector<int> &Points)
 {
-	Players[0]->GetHand(deck, Owner::Player_1);
-	Players[1]->GetHand(deck, Owner::Player_2);
-	Players[2]->GetHand(deck, Owner::Player_3);
-	Players[3]->GetHand(deck, Owner::Player_4);
+	Players[0]->GetHand(Owner::Player_1);
+	Players[1]->GetHand(Owner::Player_2);
+	Players[2]->GetHand(Owner::Player_3);
+	Players[3]->GetHand(Owner::Player_4);
 
     GetBids(Players);
 	
@@ -30,7 +30,7 @@ void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
 	
 	//SetUpShoot and PlayTrickLone
 	if(m_bidAmount == 7)
-		SetUpShoot(Players, deck);
+		SetUpShoot(Players);
 	if(m_bidAmount > 6)
 	{
 		//remove player who is not in
@@ -46,7 +46,7 @@ void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
 			
 			PlayTrickLone(Players);
 			
-			m_currentTrick.Evaluate(deck);
+			m_currentTrick.Evaluate();
 			if(m_currentTrick.GetWinner() == Owner::Player_1 || m_currentTrick.GetWinner() == Owner::Player_3)
 				Team1Tricks++;
 			else
@@ -62,7 +62,7 @@ void Round::PlayRound(Deck &deck, vector<Player*> Players, vector<int> &Points)
 			
 			PlayTrick(Players);
 			
-			m_currentTrick.Evaluate(deck);
+			m_currentTrick.Evaluate();
 			if(m_currentTrick.GetWinner() == Owner::Player_1 || m_currentTrick.GetWinner() == Owner::Player_3)
 				Team1Tricks++;
 			else
@@ -78,7 +78,7 @@ void Round::GetBids(vector<Player*> Players)
     int lead = m_currentTrick.GetLeadPlayer();
     //7 is shoot and 8 is alone
     int bid = 2;
-    int player;
+    int player = (lead - 1) % 4;
     for (int i = 0; i < 4; i++)
     {
         //stay in this loop if it was an invalid bid
@@ -201,6 +201,11 @@ void Round::PlayTrick(vector<Player*> Players)
 	{
 		int good = 1;
 		cout << "This is  " << OwnerToString(Players[(lead+i)%4]->WhoAmI()) << endl;
+        if ((lead+i)%4 != 0)
+        {
+            AI* bot = new AI();
+            bot->AIPlayCard(m_currentTrick, Players[(lead + i) % 4]);
+        }
 		while (good == 1)
 		{
 			good = AskPlayCard(m_currentTrick, Players[(lead+i)%4]);
@@ -251,7 +256,7 @@ int Round::AskPlayCard(Trick &trick, Player *player)
 	return 0;
 }
 
-void Round::SetUpShoot(vector<Player*> Players, Deck &deck)
+void Round::SetUpShoot(vector<Player*> Players)
 {
 	int playerbidding = (m_playerBid + 3) % 4;
 	if(playerbidding == 0)
@@ -266,13 +271,13 @@ void Round::SetUpShoot(vector<Player*> Players, Deck &deck)
 	cout << "What card will you discard for it?\n";
 	Players[m_playerBid]->PrintHand();
 	cin >> choice;
-	Players[m_playerBid]->TakeCard(temp, choice, deck);
+	Players[m_playerBid]->TakeCard(temp, choice);
 	
 	//return the other Players hand to the deck
 	for (int i = 0; i < 5; i++)
 	{
 		Card temp = Players[(m_playerBid+2) % 4]->GiveCard(1);
-		deck.ReturnCard(temp);
+		Deck::GetInstance()->ReturnCard(temp);
 		//Players[(m_playerBid+2) % 4]->PrintHand();
 	}
 }

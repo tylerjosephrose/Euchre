@@ -16,6 +16,8 @@
 
 using namespace std;
 
+Deck* Deck::m_deckInstance = 0;
+
 Deck::Deck()
 {
 	for (int i = 0; i < 4; i++)
@@ -25,6 +27,14 @@ Deck::Deck()
 			m_cards.push_back(Card(j, i));
 		}
 	}
+}
+
+Deck* Deck::GetInstance()
+{
+	if (!m_deckInstance)
+		m_deckInstance = new Deck();
+	
+	return m_deckInstance;
 }
 
 void Deck::Shuffle()
@@ -56,5 +66,5 @@ void Deck::ReturnCard(Card card)
 
 int Deck::DeckSize() const
 {
-	return m_cards.size();
+	return (int)m_cards.size();
 }

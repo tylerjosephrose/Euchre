@@ -29,6 +29,14 @@ public:
 	string SuitToString() const;
 	string OwnerToString() const;
     void SetOwner(Owner owner);
+
+    bool operator==(const Card& rhs)
+    {
+        if (m_suit == rhs.GetSuit() && m_value == rhs.GetValue() && m_owner == rhs.GetOwner())
+            return true;
+        else
+            return false;
+    }
 	
 private:
 	Value m_value;

@@ -6,22 +6,21 @@
 #include <iostream>
 #include "Game.h"
 
-bool Windows = false;
-#ifdef _WIN32
-	Windows = true;
-#endif
+//bool Windows = false;
+//#ifdef _WIN32
+//	Windows = true;
+//#endif
 
 using namespace std;
 
 int main()
 {
-	Deck deck = Deck();
-	deck.Shuffle();
+	Deck::GetInstance()->Shuffle();
 	
 	Game game = Game();
-	game.PlayGame(deck);
+	game.PlayGame();
 
-	if(Windows)
+	//if(Windows)
     	cin.get();
 	return 0;
 }
