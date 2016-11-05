@@ -19,6 +19,7 @@ public:
     Suit GetLeadSuit() const;
     Owner GetLeadPlayer() const;
 	Suit GetTrump() const;
+	Suit GetLeft() const;
 	Owner GetWinner() const;
     void Evaluate();
 	void SetLeadSuit(Suit suit);

@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EuchreTest/Trick.cpp"
-            timestampString = "497234179.080553"
+            timestampString = "500053968.252637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
             landmarkName = "Trick::SetLeadPlayer(Owner owner)"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EuchreTest/Trick.cpp"
-            timestampString = "498179938.338483"
+            timestampString = "500053968.252637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
             landmarkName = "Trick::Evaluate()"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EuchreTest/Round.cpp"
-            timestampString = "498179938.338483"
+            timestampString = "500052109.390897"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "Round::SetUpShoot(vector&lt;Player*&gt; Players)"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EuchreTest/Player.cpp"
-            timestampString = "497649585.387541"
+            timestampString = "500053968.252637"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "Player::PlayCard(int choice, Trick &amp;trick)"
             landmarkType = "7">
          </BreakpointContent>
@@ -96,6 +96,22 @@
             startingLineNumber = "50"
             endingLineNumber = "50"
             landmarkName = "Round::PlayRound(vector&lt;Player*&gt; Players, vector&lt;int&gt; &amp;Points)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EuchreTest/AI.cpp"
+            timestampString = "500053968.252637"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "AI::DeterminePlayableCards(Trick &amp;trick, Player *player, vector&lt;Card&gt;&amp; PlayableCards)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

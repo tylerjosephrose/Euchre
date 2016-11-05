@@ -32,6 +32,25 @@ Suit Trick::GetTrump() const
 	return m_trump;
 }
 
+Suit Trick::GetLeft() const
+{
+	switch(m_trump)
+	{
+		case Hearts:
+			return Suit::Diamonds;
+		case Spades:
+			return Suit::Clubs;
+		case Diamonds:
+			return Suit::Hearts;
+		case Clubs:
+			return Suit::Spades;
+		case High:
+			return Suit::High;
+		case Low:
+			return Suit::Low;
+	}
+}
+
 void Trick::SetLeadSuit(Suit suit)
 {
 	m_leadSuit = suit;
@@ -47,6 +66,14 @@ void Trick::SetCard(Card card)
 {
 	// don't set owner so we can declare the winner card.SetOwner(Owner::InPlay);
 	m_trick.push_back(card);
+	// if this is the first card laid then we need to set it as the lead suit
+	if(m_trick.size() == 1)
+	{
+		if(card.GetValue() == Value::Jack && card.GetSuit() == GetLeft())
+			SetLeadSuit(m_trump);
+		else
+			SetLeadSuit(card.GetSuit());
+	}
 }
 
 void Trick::SetTrump(Suit suit)
@@ -77,46 +104,13 @@ void Trick::Evaluate()
 	if(m_trump != Suit::High && m_trump != Suit::Low)
 	{
 		//look for left bar
-		Suit left;
-		switch(m_trump)
-		{
-			case Hearts:
-			{
-				left = Suit::Diamonds;
-				break;
-			}
-			case Spades:
-			{
-				left = Suit::Clubs;
-				break;
-			}
-			case Diamonds:
-			{
-				left = Suit::Hearts;
-				break;
-			}
-			case Clubs:
-			{
-				left = Suit::Spades;
-				break;
-			}
-			case High:
-			{
-				left = Suit::High;
-				break;
-			}
-			case Low:
-			{
-				left = Suit::Low;
-				break;
-			}
-		}
-		
+		Suit left = GetLeft();
 		
 		for (int i = 1; i < m_trick.size(); i++)
 		{
 			if(m_trick[i].GetValue() == Value::Jack && m_trick[i].GetSuit() == m_trump)
 			{
+				Highest = m_trick[i];
 				m_winner = Highest.GetOwner();
 				cout << Highest.OwnerToString() << " is the winner with a " << 		Highest.ValueToString() << " of " << Highest.SuitToString() << endl;
 				ReturnCards();

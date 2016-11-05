@@ -8,48 +8,24 @@
 
 using namespace std;
 
+AI* AI::m_aiInstance = 0;
+
 AI::AI()
 {
 	
 }
 
-void AI::DeterminePlayableCards(Trick &trick, Player *player, vector<Card> PlayableCards)
+AI* AI::GetInstance()
+{
+	if(!m_aiInstance)
+		m_aiInstance = new AI();
+	return m_aiInstance;
+}
+
+void AI::DeterminePlayableCards(Trick &trick, Player *player, vector<Card>& PlayableCards)
 {
 	//Find left
-	Suit left;
-	switch(trick.GetTrump())
-	{
-		case Hearts:
-		{
-			left = Suit::Diamonds;
-			break;
-		}
-		case Spades:
-		{
-			left = Suit::Clubs;
-			break;
-		}
-		case Diamonds:
-		{
-			left = Suit::Hearts;
-			break;
-		}
-		case Clubs:
-		{
-			left = Suit::Spades;
-			break;
-		}
-		case High:
-		{
-			left = Suit::High;
-			break;
-		}
-		case Low:
-		{
-			left = Suit::Low;
-			break;
-		}
-	}
+	Suit left = trick.GetLeft();
 	
 	//logic for if the card is valid
 	if(trick.GetLeadPlayer() != player->m_whoami)
@@ -59,15 +35,16 @@ void AI::DeterminePlayableCards(Trick &trick, Player *player, vector<Card> Playa
 			if(iter.GetSuit() == trick.GetLeadSuit() && !(iter.GetSuit() == left && iter.GetValue() == Value::Jack))
 			{
 				PlayableCards.push_back(iter);
-				break;
 			}
 			//if this card is the left bar and lead is trump
 			if(trick.GetLeadSuit() == trick.GetTrump() && (iter.GetSuit() == left && iter.GetValue() == Value::Jack))
 			{
 				PlayableCards.push_back(iter);
-				break;
 			}
 		}
+		if(PlayableCards.size() == 0)
+			for( auto iter: player->m_hand )
+				PlayableCards.push_back(iter);
 	}
 	else
 	{
@@ -91,6 +68,9 @@ void AI::AIPlayCard(Trick &trick, Player *player)
         cardnum++;
         Card test(1, 1);
         if(iter == PlayableCards[0])
+		{
             player->m_hand.erase(player->m_hand.begin() + cardnum);
+			break;
+		}
     }
 }

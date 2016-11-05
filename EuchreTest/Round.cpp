@@ -200,15 +200,17 @@ void Round::PlayTrick(vector<Player*> Players)
 	for(int i = 0; i < 4; i++)
 	{
 		int good = 1;
-		cout << "This is  " << OwnerToString(Players[(lead+i)%4]->WhoAmI()) << endl;
+		//cout << "This is  " << OwnerToString(Players[(lead+i)%4]->WhoAmI()) << endl;
         if ((lead+i)%4 != 0)
         {
-            AI* bot = new AI();
-            bot->AIPlayCard(m_currentTrick, Players[(lead + i) % 4]);
+			AI::GetInstance()->AIPlayCard(m_currentTrick, Players[(lead + i) % 4]);
         }
-		while (good == 1)
+		else
 		{
-			good = AskPlayCard(m_currentTrick, Players[(lead+i)%4]);
+			while (good == 1)
+			{
+				good = AskPlayCard(m_currentTrick, Players[(lead+i)%4]);
+			}
 		}
 	}
 }
@@ -231,9 +233,16 @@ void Round::PlayTrickLone(vector<Player*> Players)
 	{
 		int good = 1;
 		cout << "This is  " << OwnerToString(Players[(lead+i)%3]->WhoAmI()) << endl;
-		while (good == 1)
+		if ((lead+i)%4 != 0)
 		{
-			good = AskPlayCard(m_currentTrick, Players[(lead+i)%3]);
+			AI::GetInstance()->AIPlayCard(m_currentTrick, Players[(lead + i) % 4]);
+		}
+		else
+		{
+			while (good == 1)
+			{
+				good = AskPlayCard(m_currentTrick, Players[(lead+i)%3]);
+			}
 		}
 	}
 }

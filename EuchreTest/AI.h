@@ -13,9 +13,11 @@ class AI
 {
 public:
 	AI();
-	void DeterminePlayableCards(Trick &trick, Player *player, vector<Card> PlayableCards);
+	void DeterminePlayableCards(Trick &trick, Player *player, vector<Card>& PlayableCards);
 	void AIPlayCard(Trick &trick, Player *player);
+	static AI* GetInstance();
 private:
+	static AI* m_aiInstance;
 	
 };
 

@@ -23,40 +23,8 @@ int Player::PlayCard(int choice, Trick &trick)
 	Card card = m_hand[choice-1];
 	
 	//Find left
-	Suit left;
-	switch(trick.GetTrump())
-	{
-		case Hearts:
-		{
-			left = Suit::Diamonds;
-			break;
-		}
-		case Spades:
-		{
-			left = Suit::Clubs;
-			break;
-		}
-		case Diamonds:
-		{
-			left = Suit::Hearts;
-			break;
-		}
-		case Clubs:
-		{
-			left = Suit::Spades;
-			break;
-		}
-		case High:
-		{
-			left = Suit::High;
-			break;
-		}
-		case Low:
-		{
-			left = Suit::Low;
-			break;
-		}
-	}
+	Suit left = trick.GetLeft();
+	
 	
 	//logic for if the card is valid
 	if(trick.GetLeadPlayer() != m_whoami)
@@ -90,13 +58,6 @@ int Player::PlayCard(int choice, Trick &trick)
 			if(!validCard)
 				return 1;
 		}
-	}
-	else
-	{
-		if(card.GetValue() == Value::Jack && card.GetSuit() == left)
-			trick.SetLeadSuit(trick.GetTrump());
-		else
-			trick.SetLeadSuit(card.GetSuit());
 	}
 	
 	trick.SetCard(m_hand.at(choice - 1));
