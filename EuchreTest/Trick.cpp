@@ -123,7 +123,7 @@ void Trick::Evaluate()
 				isLeft = true;
 			
 			//for non trump find highest
-			if(m_trick.at(i).GetSuit() == Highest.GetSuit() && Highest.GetSuit() != m_trump && !isLeft)
+			if(m_trick.at(i).GetSuit() == Highest.GetSuit() && Highest.GetSuit() != m_trump && !isLeft && !(Highest.GetValue() == Jack && Highest.GetSuit() == left))
 				if(m_trick.at(i).GetValue() > Highest.GetValue())
 					Highest = m_trick.at(i);
 			

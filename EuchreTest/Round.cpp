@@ -233,9 +233,9 @@ void Round::PlayTrickLone(vector<Player*> Players)
 	{
 		int good = 1;
 		cout << "This is  " << OwnerToString(Players[(lead+i)%3]->WhoAmI()) << endl;
-		if ((lead+i)%4 != 0)
+		if ((lead+i)%3 != 0)
 		{
-			AI::GetInstance()->AIPlayCard(m_currentTrick, Players[(lead + i) % 4]);
+			AI::GetInstance()->AIPlayCard(m_currentTrick, Players[(lead + i) % 3]);
 		}
 		else
 		{
