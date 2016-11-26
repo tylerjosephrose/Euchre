@@ -14,6 +14,19 @@ Round::Round(Owner LeadPlayer)
 {
 	m_currentTrick.SetLeadPlayer(LeadPlayer);
     m_teamBid = 0;
+	AI* Comp1 = new AI();
+	AI* Comp2 = new AI();
+	AI* Comp3 = new AI();
+	Computers.push_back(Comp1);
+	Computers.push_back(Comp2);
+	Computers.push_back(Comp3);
+}
+Round::~Round()
+{
+	for(auto iter: Computers)
+	{
+		delete iter;
+	}
 }
 
 void Round::PlayRound(vector<Player*> Players, vector<int> &Points)
@@ -77,19 +90,29 @@ void Round::GetBids(vector<Player*> Players)
 {
     int lead = m_currentTrick.GetLeadPlayer();
     //7 is shoot and 8 is alone
-    int bid = 2;
+    m_currentBid = 2;
     int player = (lead - 1) % 4;
     for (int i = 0; i < 4; i++)
     {
         //stay in this loop if it was an invalid bid
         int j = 0;
+		if(i != 0)
+		{
+			int temp = m_currentBid;
+			Computers[(lead + i - 1) % 4]->AIBid(m_currentTrick, Players[(lead + i) % 4], m_currentBid);
+			if(m_currentBid == 8)
+				FinalizeBid((lead + i) % 4, Players);
+			if(temp != m_currentBid)
+				player = (lead + i) % 4;
+			break;
+		}
         do
         {
 			//Print current bidding info
-            if (bid == 2)
+            if (m_currentBid == 2)
                 cout << "There is no current bid" << endl;
             else
-                cout << "The current bid is: " << bid << endl;
+                cout << "The current bid is: " << m_currentBid << endl;
             cout << OwnerToString(Players[(lead + i) % 4]->WhoAmI()) << ", place a bid. (enter 0 to pass)" << endl;
             cout << "Options are 3, 4, 5, 6, shoot, alone" << endl;
 			//Print hand of player up
@@ -101,10 +124,10 @@ void Round::GetBids(vector<Player*> Players)
             if (icompare(propose, "0") && i != 3)
                 break;
 			//not bidding and is the last player with no previous bid
-            if (icompare(propose, "0") && i == 3 && bid == 2)
+            if (icompare(propose, "0") && i == 3 && m_currentBid == 2)
             {
                 cout << "You are last and no one has made a bid. You must bid" << endl;
-				bid = 3;
+				m_currentBid = 3;
                 j = 1;
             }
 			//not bidding and last player but there is already a bid
@@ -112,19 +135,19 @@ void Round::GetBids(vector<Player*> Players)
 				break;
             if (icompare(propose, "alone"))
             {
-                bid = 8;
+                m_currentBid = 8;
 				player = (lead + i) % 4;
 				m_playerBid = player;
-				m_bidAmount = bid;
-				FinalizeBid(player);
+				m_bidAmount = m_currentBid;
+				FinalizeBid(player, Players);
                 return;
             }
             else if (icompare(propose, "shoot"))
             {
-                bid = 7;
+                m_currentBid = 7;
                 player = (lead + i) % 4;
             }
-            else if (atoi(propose.c_str()) > bid)
+            else if (atoi(propose.c_str()) > m_currentBid)
             {
 				if (atoi(propose.c_str()) > 8)
 				{
@@ -133,11 +156,11 @@ void Round::GetBids(vector<Player*> Players)
 				}
 				else
 				{
-					bid = atoi(propose.c_str());
+					m_currentBid = atoi(propose.c_str());
 					player = (lead + i) % 4;
 				}
             }
-            else if (atoi(propose.c_str()) < bid)
+            else if (atoi(propose.c_str()) < m_currentBid)
             {
                 cout << "You did not bid high enough" << endl;
                 j = 1;
@@ -145,11 +168,11 @@ void Round::GetBids(vector<Player*> Players)
         } while (j == 1);
     }
 	m_playerBid = player;
-	m_bidAmount = bid;
-    FinalizeBid(player);
+	m_bidAmount = m_currentBid;
+    FinalizeBid(player, Players);
 }
 
-void Round::FinalizeBid(int playerBid)
+void Round::FinalizeBid(int playerBid, vector<Player*> Players)
 {
     //Highest bidder choses their suit here
     switch (playerBid)
@@ -175,6 +198,11 @@ void Round::FinalizeBid(int playerBid)
 			break;
 		}
     }
+	
+	if(playerBid != 0)
+	{
+		Computers[playerBid - 1]->AIFinalizeBid(m_currentTrick, Players[playerBid]);
+	}
 
     string input;
     cout << "Player " << playerBid + 1 << ", What Suit do you want?" << endl;
@@ -203,7 +231,7 @@ void Round::PlayTrick(vector<Player*> Players)
 		//cout << "This is  " << OwnerToString(Players[(lead+i)%4]->WhoAmI()) << endl;
         if ((lead+i)%4 != 0)
         {
-			AI::GetInstance()->AIPlayCard(m_currentTrick, Players[(lead + i) % 4]);
+			Computers[(lead + i - 1) % 4]->AIPlayCard(m_currentTrick, Players[(lead + i) % 4]);
         }
 		else
 		{
@@ -235,7 +263,7 @@ void Round::PlayTrickLone(vector<Player*> Players)
 		cout << "This is  " << OwnerToString(Players[(lead+i)%3]->WhoAmI()) << endl;
 		if ((lead+i)%3 != 0)
 		{
-			AI::GetInstance()->AIPlayCard(m_currentTrick, Players[(lead + i) % 3]);
+			Computers[(lead + i - 1) % 4]->AIPlayCard(m_currentTrick, Players[(lead + i) % 3]);
 		}
 		else
 		{

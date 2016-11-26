@@ -20,6 +20,7 @@ public:
     Owner GetLeadPlayer() const;
 	Suit GetTrump() const;
 	Suit GetLeft() const;
+	static Suit GetLeft(Suit suit);
 	Owner GetWinner() const;
     void Evaluate();
 	void SetLeadSuit(Suit suit);

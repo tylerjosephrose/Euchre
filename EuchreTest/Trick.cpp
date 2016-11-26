@@ -51,6 +51,25 @@ Suit Trick::GetLeft() const
 	}
 }
 
+Suit Trick::GetLeft(Suit suit)
+{
+	switch(suit)
+	{
+		case Hearts:
+			return Suit::Diamonds;
+		case Spades:
+			return Suit::Clubs;
+		case Diamonds:
+			return Suit::Hearts;
+		case Clubs:
+			return Suit::Spades;
+		case High:
+			return Suit::High;
+		case Low:
+			return Suit::Low;
+	}
+}
+
 void Trick::SetLeadSuit(Suit suit)
 {
 	m_leadSuit = suit;

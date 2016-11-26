@@ -9,16 +9,22 @@
 
 #include "Game.h"
 
+#include <map>
+
 class AI
 {
 public:
 	AI();
 	void DeterminePlayableCards(Trick &trick, Player *player, vector<Card>& PlayableCards);
+	void AIBid(Trick &trick, Player *player, int &currentBid);
+	void BidScoring(Trick &trick, Player *player);
 	void AIPlayCard(Trick &trick, Player *player);
-	static AI* GetInstance();
+	void AIFinalizeBid(Trick &trick, Player *player);
+	//static AI* GetInstance();
 private:
-	static AI* m_aiInstance;
-	
+	//static AI* m_aiInstance;
+	std::map<Suit, int> m_bidScoring;
+	Suit m_bestSuit;
 };
 
 #endif // AI_h
