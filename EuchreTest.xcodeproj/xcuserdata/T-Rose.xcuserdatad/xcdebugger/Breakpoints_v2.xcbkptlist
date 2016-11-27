@@ -38,15 +38,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EuchreTest/Round.cpp"
-            timestampString = "501882214.054733"
+            timestampString = "501982272.094841"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "320"
-            endingLineNumber = "320"
+            startingLineNumber = "331"
+            endingLineNumber = "331"
             landmarkName = "Round::SetUpShoot(vector&lt;Player*&gt; Players)"
             landmarkType = "7">
          </BreakpointContent>
@@ -128,6 +128,38 @@
             startingLineNumber = "147"
             endingLineNumber = "147"
             landmarkName = "AI::BidScoring(Trick &amp;trick, Player *player)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EuchreTest/Round.cpp"
+            timestampString = "501981258.720725"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "Round::PlayRound(vector&lt;Player*&gt; Players, vector&lt;int&gt; &amp;Points)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EuchreTest/Round.cpp"
+            timestampString = "501981961.22836"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "Round::GetBids(vector&lt;Player*&gt; Players)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

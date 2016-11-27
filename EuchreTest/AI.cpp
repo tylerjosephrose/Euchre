@@ -195,6 +195,45 @@ void AI::BidScoring(Trick &trick, Player *player)
 		}
 		m_bidScoring[right] = score;
 	}
+	
+	// Score the hand on high
+	int score = 0;
+	if(trick.GetLeadPlayer() == player->WhoAmI())
+		score += 10;
+	
+	vector<Suit> Aces;
+	vector<Suit> AceKings;
+	
+	for(auto iter: player->m_hand)
+	{
+		if(iter.GetValue() == Ace)
+		{
+			score += 20;
+			Aces.push_back(iter.GetSuit());
+			break;
+		}
+		else if(iter.GetValue() == King)
+		{
+			score += 10;
+			if(find(Aces.begin(), Aces.end(), iter.GetSuit()) != Aces.end())
+			{
+				score += 5;
+				AceKings.push_back(iter.GetSuit());
+			}
+			break;
+		}
+		else if(iter.GetValue() == Queen)
+		{
+			score += 2;
+			if(find(AceKings.begin(), AceKings.end(), iter.GetSuit()) != AceKings.end())
+				score += 5;
+			break;
+		}
+	}
+	m_bidScoring[High] = score;
+	
+	// Score the hand on low
+	score = 0;
 }
 
 void AI::AIFinalizeBid(Trick &trick, Player *player)

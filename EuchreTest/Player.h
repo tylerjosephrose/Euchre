@@ -26,6 +26,8 @@ public:
 	void PrintHand() const;
 	Owner WhoAmI() const;
 	
+	static bool CompareCards(Card &c1, Card &c2);
+	
 private:
 	vector<Card>m_hand;
 	Owner m_whoami;

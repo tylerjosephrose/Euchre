@@ -95,24 +95,27 @@ void Round::GetBids(vector<Player*> Players)
     for (int i = 0; i < 4; i++)
     {
         //stay in this loop if it was an invalid bid
-        int j = 0;
-		if(i != 0)
+        int j = 1;
+		if((lead + i) % 4 != 0)
 		{
 			int temp = m_currentBid;
-			Computers[(lead + i - 1) % 4]->AIBid(m_currentTrick, Players[(lead + i) % 4], m_currentBid);
+			Computers[(lead + i) % 3]->AIBid(m_currentTrick, Players[(lead + i) % 4], m_currentBid);
 			if(m_currentBid == 8)
-				FinalizeBid((lead + i) % 4, Players);
+			{
+				FinalizeBid((lead + i - 1) % 4, Players);
+				break;
+			}
 			if(temp != m_currentBid)
 				player = (lead + i) % 4;
-			break;
+			j = 0;
 		}
-        do
+        while(j == 1)
         {
 			//Print current bidding info
             if (m_currentBid == 2)
                 cout << "There is no current bid" << endl;
             else
-                cout << "The current bid is: " << m_currentBid << endl;
+                cout << "The current bid is: " << m_currentBid << " by Player " << (m_playerBid + 1) % 4 << endl;
             cout << OwnerToString(Players[(lead + i) % 4]->WhoAmI()) << ", place a bid. (enter 0 to pass)" << endl;
             cout << "Options are 3, 4, 5, 6, shoot, alone" << endl;
 			//Print hand of player up
@@ -122,7 +125,10 @@ void Round::GetBids(vector<Player*> Players)
 			
 			//not bidding and not the last player to go with no previous bid
             if (icompare(propose, "0") && i != 3)
+			{
+				j = 0;
                 break;
+			}
 			//not bidding and is the last player with no previous bid
             if (icompare(propose, "0") && i == 3 && m_currentBid == 2)
             {
@@ -132,7 +138,10 @@ void Round::GetBids(vector<Player*> Players)
             }
 			//not bidding and last player but there is already a bid
 			if (icompare(propose, "0") && i == 3)
+			{
+				j = 0;
 				break;
+			}
             if (icompare(propose, "alone"))
             {
                 m_currentBid = 8;
@@ -144,6 +153,7 @@ void Round::GetBids(vector<Player*> Players)
             }
             else if (icompare(propose, "shoot"))
             {
+				j = 0;
                 m_currentBid = 7;
                 player = (lead + i) % 4;
             }
@@ -156,6 +166,7 @@ void Round::GetBids(vector<Player*> Players)
 				}
 				else
 				{
+					j = 0;
 					m_currentBid = atoi(propose.c_str());
 					player = (lead + i) % 4;
 				}
@@ -165,7 +176,7 @@ void Round::GetBids(vector<Player*> Players)
                 cout << "You did not bid high enough" << endl;
                 j = 1;
             }
-        } while (j == 1);
+        }
     }
 	m_playerBid = player;
 	m_bidAmount = m_currentBid;

@@ -87,13 +87,27 @@ void Player::TakeCard(Card card, int choice)
 void Player::GetHand(Owner owner)
 {
 	//get 6 cards from the deck to by my hand for the round
+	Deck* deck = Deck::GetInstance();
     for (int i = 0; i < 6; i++)
     {
-		Card temp = Deck::GetInstance()->DrawCard();
+		Card temp = deck->DrawCard();
         temp.SetOwner(owner);
         m_hand.push_back(temp);
     }
+	sort(m_hand.begin(), m_hand.end(), CompareCards);
     return;
+}
+
+bool Player::CompareCards(Card &c1, Card &c2)
+{
+	// Returns true if the first card is greater than the second card
+	// Sorts by suit first (hearts, spades, diamonds, clubs) then by value
+	if(c1.GetSuit() != c2.GetSuit())
+	{
+		return c1.GetSuit() > c2.GetSuit();
+	}
+	else
+		return c1.GetValue() > c2.GetValue();
 }
 
 Owner Player::WhoAmI() const

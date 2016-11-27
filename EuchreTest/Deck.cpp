@@ -20,7 +20,7 @@ Deck* Deck::m_deckInstance = 0;
 
 Deck::Deck()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 1; i < 5; i++)
 	{
 		for (int j = 9; j < 15; j++)
 		{
