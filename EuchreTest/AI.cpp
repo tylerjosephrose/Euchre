@@ -8,19 +8,10 @@
 
 using namespace std;
 
-//AI* AI::m_aiInstance = 0;
-
 AI::AI()
 {
 	
 }
-
-/*AI* AI::GetInstance()
-{
-	if(!m_aiInstance)
-		m_aiInstance = new AI();
-	return m_aiInstance;
-}*/
 
 void AI::DeterminePlayableCards(Trick &trick, Player *player, vector<Card>& PlayableCards)
 {
@@ -239,4 +230,32 @@ void AI::BidScoring(Trick &trick, Player *player)
 void AI::AIFinalizeBid(Trick &trick, Player *player)
 {
 	trick.SetTrump(m_bestSuit);
+}
+
+Card AI::AIPassCard(Trick &trick, Player *player)
+{
+	vector<Card> trumpCards;
+	vector<Card> offAces;
+	for(auto card: player->m_hand)
+	{
+		Suit left = Trick::GetLeft(trick.GetTrump());
+		if(card.GetValue() == Jack && (card.GetSuit() == trick.GetTrump() || left))
+		{
+			Card temp = card;
+			CleanupHand(player);
+			return temp;
+		}
+		if(card.GetSuit() == trick.GetTrump())
+			trumpCards.push_back(card);
+	}
+}
+				
+void AI::CleanupHand(Player *player)
+{
+	while(player->m_hand.size() > 0)
+	{
+		Card temp = player->m_hand[0];
+		player->m_hand.erase(player->m_hand.begin());
+		Deck::GetInstance()->ReturnCard(temp);
+	}
 }
