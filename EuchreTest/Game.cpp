@@ -9,6 +9,10 @@
 
 using namespace std;
 
+bool GameSettings::m_allowLow;
+bool GameSettings::m_allowHigh;
+bool GameSettings::m_screwTheDealer;
+
 Game::Game()
 {
 	
@@ -16,6 +20,14 @@ Game::Game()
 
 void Game::PlayGame()
 {
+    // <Tyler Rose> 07-Dec-2016
+    // Need to set all game settings that are requested
+    // Turning this on is not yet fully supported by AI
+    GameSettings::SetAllowLow(false);
+    GameSettings::SetAllowHigh(true);
+    // Turning this off is not yet supported
+    GameSettings::SetScrewTheDealer(true);
+
 	Player Player1(Owner::Player_1), Player2(Owner::Player_2), Player3(Owner::Player_3), Player4(Owner::Player_4);
 	
 	vector<Player*> Players;

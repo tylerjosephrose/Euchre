@@ -217,9 +217,25 @@ void Round::FinalizeBid(int playerBid, vector<Player*> Players)
     if (icompare(input, "Clubs"))
         m_currentTrick.SetTrump(Suit::Clubs);
     if (icompare(input, "High"))
-        m_currentTrick.SetTrump(Suit::High);
+    {
+        if (GameSettings::GetAllowHigh())
+            m_currentTrick.SetTrump(Suit::High);
+        else
+        {
+            cout << "High is not allowed in your settings. Try a different suit" << endl;
+            FinalizeBid(playerBid, Players);
+        }
+    }
     if (icompare(input, "Low"))
-        m_currentTrick.SetTrump(Suit::Low);
+    {
+        if (GameSettings::GetAllowLow())
+            m_currentTrick.SetTrump(Suit::Low);
+        else
+        {
+            cout << "Low is not allowed in your settings. Try a different suit" << endl;
+            FinalizeBid(playerBid, Players);
+        }
+    }
 }
 
 void Round::PlayTrick(vector<Player*> Players)
