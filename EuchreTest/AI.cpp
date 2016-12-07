@@ -5,6 +5,7 @@
  */
 
 #include "AI.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -46,19 +47,63 @@ void AI::DeterminePlayableCards(Trick &trick, Player *player, vector<Card>& Play
 	}
 }
 
+Card AI::DetermineBestCard(Trick &trick, Player *player, vector<Card>& PlayableCards)
+{
+    // Find trump and left
+    Suit trump = trick.GetTrump();
+    Suit left = trick.GetLeft();
+
+    if (trick.GetLeadPlayer() != player->m_whoami)
+    {
+        // <Tyler Rose> 07-Dec-2016
+        // Hold on to one card in case player is leading with all trump but no right bar
+        Card temp = PlayableCards[0];
+        for (unsigned int i = 0; i < PlayableCards.size(); i++)
+        {
+            if (PlayableCards[i].GetSuit() == trump && PlayableCards[i].GetValue() == Jack)
+                return PlayableCards[i];
+            if (PlayableCards[i].GetSuit() == trump || (PlayableCards[i].GetSuit() == left && PlayableCards[i].GetValue() == Jack))
+            {
+                PlayableCards.erase(PlayableCards.begin() + i);
+                continue;
+            }
+            if (PlayableCards[i].GetValue() == Ace)
+            {
+                return PlayableCards[i];
+            }
+        }
+        if (PlayableCards.size() == 0)
+        {
+            return temp;
+        }
+        else
+        {
+            // <Tyler Rose> 07-Dec-2016
+            // If there are no good cards then just play a random card left
+            random_shuffle(PlayableCards.begin(), PlayableCards.end());
+            return PlayableCards[0];
+        }
+    }
+    Card temp;
+    return temp;
+}
+
 void AI::AIPlayCard(Trick &trick, Player *player)
 {
 	vector<Card> PlayableCards;
 	DeterminePlayableCards(trick, player, PlayableCards);
+
     //initially just pick one of the playable cards (no logic yet)
-	trick.SetCard(PlayableCards[0]);
+    Card toPlay = DetermineBestCard(trick, player, PlayableCards);
+	trick.SetCard(toPlay);
+
 	//erase the played card
     int cardnum = -1;
     for (auto iter : player->m_hand)
     {
         cardnum++;
         Card test(1, 1);
-        if(iter == PlayableCards[0])
+        if(iter == toPlay)
 		{
             player->m_hand.erase(player->m_hand.begin() + cardnum);
 			break;

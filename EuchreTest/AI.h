@@ -16,6 +16,7 @@ class AI
 public:
 	AI();
 	void DeterminePlayableCards(Trick &trick, Player *player, vector<Card>& PlayableCards);
+    Card DetermineBestCard(Trick &trick, Player *player, vector<Card>& PlayableCards);
 	void AIBid(Trick &trick, Player *player, int &currentBid);
 	void BidScoring(Trick &trick, Player *player);
 	void AIPlayCard(Trick &trick, Player *player);
