@@ -11,6 +11,11 @@
 
 using namespace std;
 
+Card::Card()
+{
+
+}
+
 Card::Card(int value, int suit)
 {
 	

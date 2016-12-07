@@ -4,6 +4,8 @@
 		Sep-24-2016
 */
 
+#include "AI.h"
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -14,6 +16,12 @@ using namespace std;
 Player::Player(Owner player)
 {
 	m_whoami = player;
+    myAI = new AI();
+}
+
+Player::~Player()
+{
+    delete myAI;
 }
 
 // returns int to show status. if 0 then it is valid play
@@ -94,8 +102,13 @@ void Player::GetHand(Owner owner)
         temp.SetOwner(owner);
         m_hand.push_back(temp);
     }
-	sort(m_hand.begin(), m_hand.end(), CompareCards);
+    SortHand();
     return;
+}
+
+void Player::SortHand()
+{
+    sort(m_hand.begin(), m_hand.end(), CompareCards);
 }
 
 bool Player::CompareCards(Card &c1, Card &c2)

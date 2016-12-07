@@ -7,11 +7,8 @@ Tyler Rose
 Sep-23-2016
 */
 
-#include "AI.h"
 #include "Deck.h"
 #include "Player.h"
-
-class AI;
 
 class Round
 {
@@ -33,7 +30,6 @@ private:
 	int m_bidAmount;
 	int m_currentBid;
 	int m_playerBid;
-	vector<AI*> Computers;
 };
 
 #endif

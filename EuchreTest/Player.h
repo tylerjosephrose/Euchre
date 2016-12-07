@@ -19,12 +19,15 @@ class Player
 	friend class AI;
 public:
 	Player(Owner player);
+    ~Player();
 	int PlayCard(int choice, Trick &trick);
 	Card GiveCard(int choice);
 	void TakeCard(Card card, int choice);
 	void GetHand(Owner owner);
 	void PrintHand() const;
 	Owner WhoAmI() const;
+    AI* myAI;
+    void SortHand();
 	
 	static bool CompareCards(Card &c1, Card &c2);
 	

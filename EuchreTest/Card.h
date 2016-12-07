@@ -19,6 +19,9 @@ enum Owner { Player_1 = 0, Player_2 = 1, Player_3 = 2, Player_4 = 3, MainDeck = 
 class Card
 {
 public:
+    //Default Constructor only to be used as placeholder card
+    Card();
+
 	//Constructor
 	Card(int value, int suit);
 	

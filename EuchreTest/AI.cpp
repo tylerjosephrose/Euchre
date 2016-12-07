@@ -74,7 +74,7 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 	
 	// Is this the last player with no current bid?
 	bool forceBid;
-	player->WhoAmI() == (trick.GetLeadPlayer() - 1) % 4 && currentBid == 2 ? forceBid = true : forceBid = false;
+	player->WhoAmI() == (trick.GetLeadPlayer() + 3) % 4 && currentBid == 2 ? forceBid = true : forceBid = false;
 	
 	int highest = 0;
 	if(m_bidScoring.size() > 6)
@@ -247,7 +247,27 @@ Card AI::AIPassCard(Trick &trick, Player *player)
 		}
 		if(card.GetSuit() == trick.GetTrump())
 			trumpCards.push_back(card);
+        if (card.GetValue() == Ace && card.GetSuit() != trick.GetTrump())
+            offAces.push_back(card);
 	}
+    if (trumpCards.size() > 0)
+    {
+        Card temp = trumpCards[0];
+        CleanupHand(player);
+        return temp;
+    }
+    else if (offAces.size() > 0)
+    {
+        Card temp = offAces[0];
+        CleanupHand(player);
+        return temp;
+    }
+    else
+    {
+        Card temp = player->m_hand[0];
+        CleanupHand(player);
+        return temp;
+    }
 }
 				
 void AI::CleanupHand(Player *player)
