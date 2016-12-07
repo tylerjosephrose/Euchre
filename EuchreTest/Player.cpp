@@ -83,7 +83,7 @@ Card Player::GiveCard(int choice)
 
 void Player::TakeCard(Card card, int choice)
 {
-	//since TakeCard is only called for shooting, we need to switch the owner to the partner
+	// be sure to set ownership to us now
 	Card temp = m_hand[choice-1];
 	m_hand.erase(m_hand.begin() + choice - 1);
 	card.SetOwner(temp.GetOwner());

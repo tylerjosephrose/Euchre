@@ -49,11 +49,19 @@ void AI::DeterminePlayableCards(Trick &trick, Player *player, vector<Card>& Play
 
 Card AI::DetermineBestCard(Trick &trick, Player *player, vector<Card>& PlayableCards)
 {
+    // This does NOT look at the cards played already to find the best match!!!
+    // This is also heavily dependent on the hand being sorted according to trump
+
     // Find trump and left
     Suit trump = trick.GetTrump();
     Suit left = trick.GetLeft();
 
-    if (trick.GetLeadPlayer() != player->m_whoami)
+    // If no choices then play the card
+    if (PlayableCards.size() == 1)
+        return PlayableCards[0];
+
+    // Leading and it is the first hand or leading and not the bidder
+    if (trick.GetLeadPlayer() == player->WhoAmI() && (player->m_hand.size() == 6 || trick.GetBidder() != player->WhoAmI()))
     {
         // <Tyler Rose> 07-Dec-2016
         // Hold on to one card in case player is leading with all trump but no right bar
@@ -82,6 +90,48 @@ Card AI::DetermineBestCard(Trick &trick, Player *player, vector<Card>& PlayableC
             // If there are no good cards then just play a random card left
             random_shuffle(PlayableCards.begin(), PlayableCards.end());
             return PlayableCards[0];
+        }
+    }
+
+    // Leading and bidder
+    else if (trick.GetLeadPlayer() == player->WhoAmI() && trick.GetBidder() == player->WhoAmI())
+    {
+        // Dependent on Sort by trump
+        for (unsigned int i = 0; i < PlayableCards.size(); i++)
+        {
+            if (PlayableCards[i].GetSuit() == trump)
+                return PlayableCards[i];
+            if (PlayableCards[i].GetValue() == Ace)
+                return PlayableCards[i];
+        }
+        // No trump or aces left so lets throw something out there and bank on our partner!
+        return PlayableCards[0];
+    }
+
+     // Not leading (don't see any reason to distinguish between bidder and non bidder in this case)
+    else if (trick.GetBidder() == player->WhoAmI())
+    {
+        if (trick.GetLeadSuit() != trump)
+        {
+            Card trumpCard;
+            for (auto iter : PlayableCards)
+            {
+                if (iter.GetSuit() == trump)
+                    trumpCard = iter;
+                if (iter.GetSuit() == trick.GetLeadSuit() && iter.GetValue() == Ace)
+                    return iter;
+            }
+            if (trumpCard.GetSuit() == trump)
+                return trumpCard;
+            else
+                return PlayableCards[PlayableCards.size() - 1];
+        }
+        else
+        {
+            if (PlayableCards[0].GetSuit() == trump)
+                return PlayableCards[0];
+            else
+                return PlayableCards[PlayableCards.size() - 1];
         }
     }
     Card temp;
@@ -140,7 +190,7 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 		if(currentBid < 8)
 			currentBid = 8;
 	}
-	else if(highest > 80)
+	else if(highest > 10)
 	{
 		// TODO: call shoot in bestSuit
 		if(currentBid < 7)
@@ -318,6 +368,41 @@ Card AI::AIPassCard(Trick &trick, Player *player)
         Card temp = player->m_hand[0];
         CleanupHand(player);
         return temp;
+    }
+}
+
+void AI::AITakeCard(Trick &trick, Player *player, Card card)
+{
+    int cardnum = -1;
+    int lastCard;
+    Suit left = trick.GetLeft();
+    vector<Card> possibilities;
+    for (auto iter : player->m_hand)
+    {
+        cardnum++;
+        if (iter.GetSuit() != trick.GetTrump() || !(iter.GetSuit() == left && iter.GetValue() == Jack) || iter.GetValue() != Ace)
+        {
+            possibilities.push_back(iter);
+            lastCard = cardnum;
+        }
+    }
+
+    Card temp;
+    if (possibilities.size() > 0)
+    {
+        temp = possibilities[possibilities.size() - 1];
+        player->m_hand.erase(player->m_hand.begin() + lastCard);
+        card.SetOwner(temp.GetOwner());
+        Deck::GetInstance()->ReturnCard(temp);
+        player->m_hand.push_back(card);
+    }
+    else
+    {
+        temp = player->m_hand[player->m_hand.size() - 1];
+        player->m_hand.erase(player->m_hand.begin() + 5);
+        card.SetOwner(temp.GetOwner());
+        Deck::GetInstance()->ReturnCard(temp);
+        player->m_hand.push_back(card);
     }
 }
 				

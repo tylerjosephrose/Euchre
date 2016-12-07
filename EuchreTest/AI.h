@@ -22,6 +22,7 @@ public:
 	void AIPlayCard(Trick &trick, Player *player);
 	void AIFinalizeBid(Trick &trick, Player *player);
 	Card AIPassCard(Trick &trick, Player *player);
+    void AITakeCard(Trick &trick, Player *player, Card card);
 	void CleanupHand(Player *player);
 	//static AI* GetInstance();
 private:

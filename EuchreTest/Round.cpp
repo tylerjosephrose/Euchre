@@ -103,7 +103,7 @@ void Round::GetBids(vector<Player*> Players)
             if (m_currentBid == 2)
                 cout << "There is no current bid" << endl;
             else
-                cout << "The current bid is: " << m_currentBid << " by Player " << (m_playerBid + 1) % 4 << endl;
+                cout << "The current bid is: " << m_currentBid << " by Player " << (player + 1) % 4 << endl;
             cout << OwnerToString(Players[playerUp]->WhoAmI()) << ", place a bid. (enter 0 to pass)" << endl;
             cout << "Options are 3, 4, 5, 6, shoot, alone" << endl;
 			//Print hand of player up
@@ -201,6 +201,7 @@ void Round::FinalizeBid(int playerBid, vector<Player*> Players)
 	if(playerBid != 0)
 	{
 		Players[playerBid]->myAI->AIFinalizeBid(m_currentTrick, Players[playerBid]);
+        m_currentTrick.SetBidder(static_cast<Owner>(playerBid));
         return;
 	}
 
@@ -236,6 +237,7 @@ void Round::FinalizeBid(int playerBid, vector<Player*> Players)
             FinalizeBid(playerBid, Players);
         }
     }
+    m_currentTrick.SetBidder(static_cast<Owner>(playerBid));
 }
 
 void Round::PlayTrick(vector<Player*> Players)
@@ -325,14 +327,20 @@ void Round::SetUpShoot(vector<Player*> Players)
     }
 
     // This part is for recieving the card
-    // TODO: Allow AI to recieve a card if they shoot it
-	cout << "Player " << m_playerBid + 1 << ", your teammate is giving you the " << temp.ValueToString() << " of " << temp.SuitToString() << endl;
-	cout << "What card will you discard for it?\n";
-	Players[m_playerBid]->PrintHand();
-    int choice;
-	cin >> choice;
-	Players[m_playerBid]->TakeCard(temp, choice);
-    Players[m_playerBid]->SortHand();
+    if (m_playerBid != 0)
+    {
+        Players[m_playerBid]->myAI->AITakeCard(m_currentTrick, Players[m_playerBid], temp);
+    }
+    else
+    {
+        cout << "Player " << m_playerBid + 1 << ", your teammate is giving you the " << temp.ValueToString() << " of " << temp.SuitToString() << endl;
+        cout << "What card will you discard for it?\n";
+        Players[m_playerBid]->PrintHand();
+        int choice;
+        cin >> choice;
+        Players[m_playerBid]->TakeCard(temp, choice);
+        Players[m_playerBid]->SortHand();
+    }
 	
 	//return the other Players hand to the deck
     if (givingPlayer == 0)

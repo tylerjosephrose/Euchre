@@ -22,11 +22,13 @@ public:
 	Suit GetLeft() const;
 	static Suit GetLeft(Suit suit);
 	Owner GetWinner() const;
+    Owner GetBidder() const;
     void Evaluate();
 	void SetLeadSuit(Suit suit);
 	void SetLeadPlayer(Owner owner);
 	void SetCard(Card card);
 	void SetTrump(Suit suit);
+    void SetBidder(Owner owner);
 	void PrintTrick();
 
 private:
@@ -37,6 +39,7 @@ private:
 	Owner m_leadPlayer;
 	Suit m_trump;
 	Owner m_winner;
+    Owner m_bidder;
 };
 
 #endif

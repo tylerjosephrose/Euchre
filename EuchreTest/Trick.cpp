@@ -27,6 +27,11 @@ Owner Trick::GetLeadPlayer() const
 	return m_leadPlayer;
 }
 
+Owner Trick::GetBidder() const
+{
+    return m_bidder;
+}
+
 Suit Trick::GetTrump() const
 {
 	return m_trump;
@@ -100,6 +105,11 @@ void Trick::SetTrump(Suit suit)
 	m_trump = suit;
 }
 
+void Trick::SetBidder(Owner owner)
+{
+    m_bidder = owner;
+}
+
 void Trick::PrintTrick()
 {
 	for (auto iter : m_trick)
@@ -125,7 +135,7 @@ void Trick::Evaluate()
 		//look for left bar
 		Suit left = GetLeft();
 		
-		for (int i = 1; i < m_trick.size(); i++)
+		for (unsigned int i = 1; i < m_trick.size(); i++)
 		{
 			if(m_trick[i].GetValue() == Value::Jack && m_trick[i].GetSuit() == m_trump)
 			{
@@ -165,7 +175,7 @@ void Trick::Evaluate()
 	}
 	else if(m_trump != Suit::Low)
 	{
-		for (int i = 1; i < m_trick.size(); i++)
+		for (unsigned int i = 1; i < m_trick.size(); i++)
 		{
 			if(m_trick[i].GetSuit() == Highest.GetSuit())
 				if(m_trick[i].GetValue() > Highest.GetValue())
@@ -174,7 +184,7 @@ void Trick::Evaluate()
 	}
 	else
 	{
-		for (int i = 1; i < m_trick.size(); i++)
+		for (unsigned int i = 1; i < m_trick.size(); i++)
 		{
 			if(m_trick[i].GetSuit() == Highest.GetSuit())
 				if(m_trick[i].GetValue() < Highest.GetValue())
