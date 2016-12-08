@@ -38,7 +38,7 @@ public:
 
     bool operator==(const Card& rhs)
     {
-        if (m_suit == rhs.GetSuit() && m_value == rhs.GetValue() && m_owner == rhs.GetOwner())
+        if (m_suit == rhs.GetSuit() && m_value == rhs.GetValue())// && m_owner == rhs.GetOwner())
             return true;
         else
             return false;
