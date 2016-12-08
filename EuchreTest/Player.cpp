@@ -118,6 +118,7 @@ void Player::SortHand(Suit trump)
         sort(m_hand.begin(), m_hand.end(), CompareCards);
     else
     {
+        // <Tyler Rose> 08-Dec-2016
         // Do fancy sort based on trump
         int preCompareValue = suits[trump];
         suits[trump] = 5;
@@ -135,7 +136,6 @@ void Player::SortHand(Suit trump)
                     swapped = true;
                 }
             }
-            PrintHand();
         } while (swapped);
         suits[trump] = preCompareValue;
     }
@@ -151,20 +151,17 @@ bool Player::CompareCardsTrump(Card &c1, Card &c2, Suit trump)
     if (c1.GetSuit() != c2.GetSuit())
     {
         if (!(c1 == leftBar || c2 == leftBar))
-            return c1.GetSuit() > c2.GetSuit();
+            return suits[c1.GetSuit()] > suits[c2.GetSuit()];
     }
-    else
-    {
-        if (c1 == rightBar)
-            return true;
-        else if (c2 == rightBar)
-            return false;
-        if (c1 == leftBar)
-            return true;
-        if (c2 == leftBar)
-            return false;
-        return c1.GetValue() > c2.GetValue();
-    }
+    if (c1 == rightBar)
+        return true;
+    else if (c2 == rightBar)
+        return false;
+    if (c1 == leftBar)
+        return true;
+    if (c2 == leftBar)
+        return false;
+    return c1.GetValue() > c2.GetValue();
     //return true;
 }
 
