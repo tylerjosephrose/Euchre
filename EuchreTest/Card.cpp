@@ -24,6 +24,13 @@ Card::Card(int value, int suit)
 	m_owner = Owner::MainDeck;
 }
 
+Card::Card(Value value, Suit suit)
+{
+    m_value = value;
+    m_suit = suit;
+    m_owner = Owner::MainDeck;
+}
+
 Value Card::GetValue() const
 {
 	return m_value;

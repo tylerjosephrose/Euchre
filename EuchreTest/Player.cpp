@@ -13,10 +13,16 @@
 
 using namespace std;
 
+static map<Suit, int> suits;
+
 Player::Player(Owner player)
 {
 	m_whoami = player;
     myAI = new AI();
+    suits[Hearts] = 4;
+    suits[Spades] = 3;
+    suits[Diamonds] = 2;
+    suits[Clubs] = 1;
 }
 
 Player::~Player()
@@ -106,9 +112,60 @@ void Player::GetHand(Owner owner)
     return;
 }
 
-void Player::SortHand()
+void Player::SortHand(Suit trump)
 {
-    sort(m_hand.begin(), m_hand.end(), CompareCards);
+    if(trump == High)
+        sort(m_hand.begin(), m_hand.end(), CompareCards);
+    else
+    {
+        // Do fancy sort based on trump
+        int preCompareValue = suits[trump];
+        suits[trump] = 5;
+        bool swapped;
+        do
+        {
+            swapped = false;
+            for (int i = 0; i < 5; i++)
+            {
+                if (CompareCardsTrump(m_hand[i+1], m_hand[i], trump))
+                {
+                    Card temp = m_hand[i];
+                    m_hand[i] = m_hand[i + 1];
+                    m_hand[i + 1] = temp;
+                    swapped = true;
+                }
+            }
+            PrintHand();
+        } while (swapped);
+        suits[trump] = preCompareValue;
+    }
+}
+
+bool Player::CompareCardsTrump(Card &c1, Card &c2, Suit trump)
+{
+    
+    // Suit left = Trick::GetLeft(trump);
+    Card rightBar = Card(Jack, trump);
+    Card leftBar = Card(Jack, Trick::GetLeft(trump));
+    // Not the same suit and not dealing with left bar
+    if (c1.GetSuit() != c2.GetSuit())
+    {
+        if (!(c1 == leftBar || c2 == leftBar))
+            return c1.GetSuit() > c2.GetSuit();
+    }
+    else
+    {
+        if (c1 == rightBar)
+            return true;
+        else if (c2 == rightBar)
+            return false;
+        if (c1 == leftBar)
+            return true;
+        if (c2 == leftBar)
+            return false;
+        return c1.GetValue() > c2.GetValue();
+    }
+    //return true;
 }
 
 bool Player::CompareCards(Card &c1, Card &c2)

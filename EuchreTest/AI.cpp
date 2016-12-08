@@ -109,7 +109,7 @@ Card AI::DetermineBestCard(Trick &trick, Player *player, vector<Card>& PlayableC
     }
 
      // Not leading (don't see any reason to distinguish between bidder and non bidder in this case)
-    else if (trick.GetBidder() == player->WhoAmI())
+    else// if (trick.GetBidder() == player->WhoAmI())
     {
         if (trick.GetLeadSuit() != trump)
         {
@@ -190,7 +190,7 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 		if(currentBid < 8)
 			currentBid = 8;
 	}
-	else if(highest > 10)
+	else if(highest > 80)
 	{
 		// TODO: call shoot in bestSuit
 		if(currentBid < 7)

@@ -19,11 +19,14 @@ enum Owner { Player_1 = 0, Player_2 = 1, Player_3 = 2, Player_4 = 3, MainDeck = 
 class Card
 {
 public:
-    //Default Constructor only to be used as placeholder card
+    // Default Constructor only to be used as placeholder card
     Card();
 
-	//Constructor
+	// Constructor
 	Card(int value, int suit);
+
+    // Constructor with correct types
+    Card(Value value, Suit suit);
 	
 	Value GetValue() const;
 	Suit GetSuit() const;
@@ -39,6 +42,11 @@ public:
             return true;
         else
             return false;
+    }
+
+    bool operator!=(const Card& rhs)
+    {
+        return !(*this == rhs);
     }
 	
 private:

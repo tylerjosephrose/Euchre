@@ -202,6 +202,8 @@ void Round::FinalizeBid(int playerBid, vector<Player*> Players)
 	{
 		Players[playerBid]->myAI->AIFinalizeBid(m_currentTrick, Players[playerBid]);
         m_currentTrick.SetBidder(static_cast<Owner>(playerBid));
+        for (auto player : Players)
+            player->SortHand(m_currentTrick.GetTrump());
         return;
 	}
 
@@ -238,6 +240,8 @@ void Round::FinalizeBid(int playerBid, vector<Player*> Players)
         }
     }
     m_currentTrick.SetBidder(static_cast<Owner>(playerBid));
+    for (auto player : Players)
+        player->SortHand(m_currentTrick.GetTrump());
 }
 
 void Round::PlayTrick(vector<Player*> Players)

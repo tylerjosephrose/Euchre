@@ -27,9 +27,10 @@ public:
 	void PrintHand() const;
 	Owner WhoAmI() const;
     AI* myAI;
-    void SortHand();
+    void SortHand(Suit suit = High);
 	
 	static bool CompareCards(Card &c1, Card &c2);
+    static bool CompareCardsTrump(Card &c1, Card &c2, Suit trump);
 	
 private:
 	vector<Card>m_hand;
