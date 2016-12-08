@@ -224,7 +224,7 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 void AI::BidScoring(Trick &trick, Player *player)
 {
 	// Score the hand on each suit
-	for (int i = 0; i < 4; i++)
+	for (int i = 1; i < 5; i++)
 	{
 		int score = 0;
 		Suit right = (Suit) i;
@@ -235,7 +235,7 @@ void AI::BidScoring(Trick &trick, Player *player)
 			if(iter.GetSuit() == left && iter.GetValue() == Jack)
 			{
 				score += 20;
-				break;
+				continue;
 			}
 			// If card is in suit of right
 			if(iter.GetSuit() == right)
@@ -243,32 +243,32 @@ void AI::BidScoring(Trick &trick, Player *player)
 				if(iter.GetValue() == Jack)
 				{
 					score += 40;
-					break;
+					continue;
 				}
 				else if(iter.GetValue() == Ace)
 				{
 					score += 10;
-					break;
+					continue;
 				}
 				else if(iter.GetValue() == King)
 				{
 					score += 9;
-					break;
+					continue;
 				}
 				else if(iter.GetValue() == Queen)
 				{
 					score += 8;
-					break;
+					continue;
 				}
 				else if (iter.GetValue() == Ten)
 				{
 					score += 7;
-					break;
+					continue;
 				}
 				else if(iter.GetValue() == Nine)
 				{
 					score += 6;
-					break;
+					continue;
 				}
 				else
 					cout << "Error occurred. Should never have uncaught right suit" << endl;
@@ -325,6 +325,12 @@ void AI::BidScoring(Trick &trick, Player *player)
     if (GameSettings::GetAllowLow())
     {
         int score = 0;
+    }
+    player->PrintHand();
+    cout << endl;
+    for (auto iter : m_bidScoring)
+    {
+        cout << SuitToString(iter.first) << ": " << iter.second << endl;
     }
 }
 
