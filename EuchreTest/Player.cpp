@@ -33,6 +33,8 @@ Player::~Player()
 // returns int to show status. if 0 then it is valid play
 int Player::PlayCard(int choice, Trick &trick)
 {
+    if (choice > m_hand.size() || choice < 0)
+        return 1;
 	//Get the Card from the choice
 	Card card = m_hand[choice-1];
 	

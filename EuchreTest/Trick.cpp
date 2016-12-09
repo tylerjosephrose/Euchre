@@ -120,7 +120,7 @@ void Trick::Evaluate()
 {
 	PrintTrick();
 	//TODO: fix this assertion
-	assert(m_trick.size() > 2 && m_trick.size() < 4);
+	//assert(m_trick.size() > 2 && m_trick.size() < 4);
 	cout << endl;
 	Card Highest = m_trick.at(0);
 	if(Highest.GetSuit() == m_trump && Highest.GetValue() == Value::Jack)

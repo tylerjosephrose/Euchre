@@ -343,7 +343,7 @@ void Round::SetUpShoot(vector<Player*> Players)
         int choice;
         cin >> choice;
         Players[m_playerBid]->TakeCard(temp, choice);
-        Players[m_playerBid]->SortHand();
+        Players[m_playerBid]->SortHand(m_currentTrick.GetTrump());
     }
 	
 	//return the other Players hand to the deck

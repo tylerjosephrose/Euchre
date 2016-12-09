@@ -99,7 +99,7 @@ Card AI::DetermineBestCard(Trick &trick, Player *player, vector<Card>& PlayableC
         // Dependent on Sort by trump
         for (unsigned int i = 0; i < PlayableCards.size(); i++)
         {
-            if (PlayableCards[i].GetSuit() == trump)
+            if (PlayableCards[i].GetSuit() == trump || (PlayableCards[i].GetSuit() == left && PlayableCards[i].GetValue() == Jack))
                 return PlayableCards[i];
             if (PlayableCards[i].GetValue() == Ace)
                 return PlayableCards[i];
@@ -184,7 +184,7 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 		}
 	}
 	// Needs to check if last to bid and force bid
-	if(highest > 89)
+	if(highest > 88)
 	{
 		// TODO: call loner in bestSuit
 		if(currentBid < 8)
@@ -196,19 +196,19 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 		if(currentBid < 7)
 			currentBid = 7;
 	}
-	else if(highest > 70)
+	else if(highest > 75)
 	{
 		// TODO: bid 5 in bestSuit
 		if(currentBid < 5)
 			currentBid = 5;
 	}
-	else if(highest > 60)
+	else if(highest > 62)
 	{
 		// TODO: bid 4 in bestSuit
 		if(currentBid < 4)
 			currentBid = 4;
 	}
-	else if(highest > 50 || forceBid)
+	else if(highest > 55 || forceBid)
 	{
 		// TODO: bid 3 in bestSuit
 		if(currentBid < 3)
@@ -223,6 +223,7 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 
 void AI::BidScoring(Trick &trick, Player *player)
 {
+    player->PrintHand();
 	// Score the hand on each suit
 	for (int i = 1; i < 5; i++)
 	{
@@ -276,7 +277,7 @@ void AI::BidScoring(Trick &trick, Player *player)
 			else if(iter.GetValue() == Ace)
 			{
 				score += 5;
-				break;
+				continue;
 			}
 		}
 		m_bidScoring[right] = score;
@@ -326,7 +327,7 @@ void AI::BidScoring(Trick &trick, Player *player)
     {
         int score = 0;
     }
-    player->PrintHand();
+
     cout << endl;
     for (auto iter : m_bidScoring)
     {
