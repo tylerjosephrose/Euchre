@@ -258,7 +258,7 @@ void Round::PlayTrick(vector<Player*> Players)
         }
 		else
 		{
-			while (good == 1)
+			while (good != 0)
 			{
 				good = AskPlayCard(m_currentTrick, Players[playerUp]);
 			}
@@ -309,6 +309,11 @@ int Round::AskPlayCard(Trick &trick, Player *player)
 		cout << "Did not follow Lead Suit of " << SuitToString(trick.GetLeadSuit()) << endl;
 		return 1;
 	}
+    else if (result == 2)
+    {
+        cout << "Picked a card not in your hand" << endl;
+        return 2;
+    }
 	return 0;
 }
 

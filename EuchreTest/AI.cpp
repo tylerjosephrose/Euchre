@@ -223,7 +223,6 @@ void AI::AIBid(Trick &trick, Player *player, int &currentBid)
 
 void AI::BidScoring(Trick &trick, Player *player)
 {
-    player->PrintHand();
 	// Score the hand on each suit
 	for (int i = 1; i < 5; i++)
 	{
@@ -326,12 +325,6 @@ void AI::BidScoring(Trick &trick, Player *player)
     if (GameSettings::GetAllowLow())
     {
         int score = 0;
-    }
-
-    cout << endl;
-    for (auto iter : m_bidScoring)
-    {
-        cout << SuitToString(iter.first) << ": " << iter.second << endl;
     }
 }
 

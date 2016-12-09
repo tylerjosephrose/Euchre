@@ -44,7 +44,7 @@ void Game::PlayGame()
 	int lead = (rand() % 4) + 1;
 	
 	//typically 32
-	int WinningScore = 32;
+	int WinningScore = 3;
 	int numOfRounds = 0;
 	while(m_teamOneScore < WinningScore && m_teamTwoScore < WinningScore)
 	{
@@ -57,6 +57,8 @@ void Game::PlayGame()
 		SetScore(Points);
 		PrintScore();
 	}
+    string winner = m_teamOneScore > m_teamTwoScore ? "Team 1" : "Team 2";
+    cout << winner << " Won!" << endl;
 }
 
 void Game::PrintScore() const

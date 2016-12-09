@@ -19,8 +19,7 @@ int main()
 	
 	Game game = Game();
 	game.PlayGame();
+    system("pause");
 
-	//if(Windows)
-    	cin.get();
 	return 0;
 }
