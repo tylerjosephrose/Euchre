@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "80"
             endingLineNumber = "80"
-            landmarkName = "Trick::SetLeadPlayer(Owner owner)"
+            landmarkName = "Trick::SetLeadSuit(Suit suit)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "116"
             endingLineNumber = "116"
-            landmarkName = "Trick::Evaluate()"
+            landmarkName = "Trick::PrintTrick()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -122,12 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EuchreTest/AI.cpp"
-            timestampString = "501882214.054733"
+            timestampString = "502927525.374188"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "AI::BidScoring(Trick &amp;trick, Player *player)"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
+            landmarkName = "AI::AIPlayCard(Trick &amp;trick, Player *player)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

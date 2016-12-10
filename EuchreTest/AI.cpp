@@ -134,8 +134,6 @@ Card AI::DetermineBestCard(Trick &trick, Player *player, vector<Card>& PlayableC
                 return PlayableCards[PlayableCards.size() - 1];
         }
     }
-    Card temp;
-    return temp;
 }
 
 void AI::AIPlayCard(Trick &trick, Player *player)
@@ -324,7 +322,7 @@ void AI::BidScoring(Trick &trick, Player *player)
 	// Score the hand on low
     if (GameSettings::GetAllowLow())
     {
-        int score = 0;
+        //int score = 0;
     }
 }
 
@@ -374,7 +372,7 @@ Card AI::AIPassCard(Trick &trick, Player *player)
 void AI::AITakeCard(Trick &trick, Player *player, Card card)
 {
     int cardnum = -1;
-    int lastCard;
+    int lastCard = 0;
     Suit left = trick.GetLeft();
     vector<Card> possibilities;
     for (auto iter : player->m_hand)

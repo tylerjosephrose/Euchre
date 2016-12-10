@@ -14,6 +14,8 @@
 
 using namespace std;
 
+class AI;
+
 class Player
 {
 	friend class AI;
